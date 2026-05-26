@@ -1,0 +1,545 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — Opportunity Hub</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app-shell">
+
+  <aside class="sidebar"></aside>
+
+  <main class="main-content">
+
+    <div class="page-header">
+      <div>
+        <h1>Dashboard</h1>
+        <div class="page-subtitle" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          TCD
+          <span style="color:var(--c-border)">&middot;</span>
+          <label style="display:flex;align-items:center;gap:5px">
+            BU:
+            <select id="bu-filter" class="input-outlined" style="padding:2px 6px;font-size:12px;height:24px">
+              <option value="Gesamt" selected>Gesamt</option>
+              <option value="Nord">Nord</option>
+              <option value="Süd">Süd</option>
+              <option value="West">West</option>
+            </select>
+          </label>
+          <span style="color:var(--c-border)">&middot;</span>
+          Stand: 22.05.2026
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:36px;height:36px;border-radius:50%;background:#1976D2;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0">AM</div>
+        <div style="line-height:1.35">
+          <div style="font-size:13px;font-weight:600;color:var(--c-text)">Aileen Match</div>
+          <div style="font-size:11px;color:var(--c-text-muted)">BU Manager</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-content">
+
+      <!-- ── KPI Grid ──────────────────────────────────────────── -->
+      <div class="kpi-grid">
+
+        <div class="kpi-card kpi-card--blue">
+          <div class="kpi-top">
+            <div class="kpi-label">Personen in der<br>Business Unit</div>
+            <div class="kpi-icon" style="background:#E3F2FD">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#1976D2">
+                <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+              </svg>
+            </div>
+          </div>
+          <div class="kpi-value" id="kpi-total">10</div>
+          <div class="kpi-sub" id="kpi-total-sub">Business Unit FinCon</div>
+        </div>
+
+        <div class="kpi-card kpi-card--green">
+          <div class="kpi-top">
+            <div class="kpi-label">Billable /<br>Auslastung</div>
+            <div class="kpi-icon" style="background:#E8F5E9">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#388E3C">
+                <path d="M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/>
+              </svg>
+            </div>
+          </div>
+          <div class="kpi-value" id="kpi-billable">70%</div>
+          <div class="kpi-sub" id="kpi-billable-sub">7 von 10 Personen</div>
+        </div>
+
+        <div class="kpi-card kpi-card--orange">
+          <div class="kpi-top">
+            <div class="kpi-label">Jetzt<br>verfügbar</div>
+            <div class="kpi-icon" style="background:#FFF3E0">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#F57C00">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+              </svg>
+            </div>
+          </div>
+          <div class="kpi-value" id="kpi-bench">3</div>
+          <details class="kpi-expand">
+            <summary><span class="kpi-arr">▸</span>&nbsp;Personen einblenden</summary>
+            <div class="kpi-people-list" id="kpi-bench-list">
+              <div class="kpi-person"><div class="kpi-person-dot" style="background:#F57C00"></div>Felix Weber</div>
+              <div class="kpi-person"><div class="kpi-person-dot" style="background:#F57C00"></div>Anna Weber</div>
+              <div class="kpi-person"><div class="kpi-person-dot" style="background:#F57C00"></div>David Klein</div>
+            </div>
+          </details>
+        </div>
+
+        <div class="kpi-card kpi-card--amber">
+          <div class="kpi-top">
+            <div class="kpi-label">Bald frei<br>(&lt; 30 Tage)</div>
+            <div class="kpi-icon" style="background:#FFF8E1">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#F9A825">
+                <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/>
+              </svg>
+            </div>
+          </div>
+          <div class="kpi-value" id="kpi-ending">1</div>
+          <details class="kpi-expand">
+            <summary><span class="kpi-arr">▸</span>&nbsp;Personen einblenden</summary>
+            <div class="kpi-people-list" id="kpi-ending-list">
+              <div class="kpi-person"><div class="kpi-person-dot" style="background:#FFA726"></div>Thomas Berger (endet 31.05.)</div>
+            </div>
+          </details>
+        </div>
+
+        <div class="kpi-card kpi-card--indigo">
+          <div class="kpi-top">
+            <div class="kpi-label">Offene<br>Matches</div>
+            <div class="kpi-icon" style="background:#E8EAF6">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#3F51B5">
+                <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/>
+              </svg>
+            </div>
+          </div>
+          <div class="kpi-value" id="kpi-matches">8</div>
+          <div class="kpi-sub">
+            <span id="kpi-matches-tm" style="color:#3F51B5">T&amp;M 6</span>
+            &nbsp;·&nbsp;
+            <span id="kpi-matches-rfp" style="color:#6A1B9A">RfP 2</span>
+          </div>
+        </div>
+
+      </div><!-- /kpi-grid -->
+
+      <!-- ── Insight Grid ──────────────────────────────────────── -->
+      <div style="display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;gap:16px;margin-bottom:32px">
+
+        <!-- Opportunities Trend -->
+        <div class="kpi-card kpi-card--blue">
+          <div class="kpi-top">
+            <div class="kpi-label">Opportunities<br>letzte 3 Monate</div>
+            <div class="kpi-icon" style="background:#E3F2FD">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#1976D2"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:auto 1fr 1fr 1fr;gap:3px 10px;font-size:11px;margin-top:4px;align-items:center">
+            <span></span>
+            <span style="color:var(--c-text-muted);text-align:center">Mrz</span>
+            <span style="color:var(--c-text-muted);text-align:center">Apr</span>
+            <span style="color:var(--c-text-muted);text-align:center">Mai</span>
+            <span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;background:#1976D2;border-radius:2px;flex-shrink:0"></span>T&amp;M</span>
+            <span style="text-align:center;font-weight:600">3</span>
+            <span style="text-align:center;font-weight:600">2</span>
+            <span style="text-align:center;font-weight:600">1</span>
+            <span style="display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;background:#6A1B9A;border-radius:2px;flex-shrink:0"></span>RfP</span>
+            <span style="text-align:center;font-weight:600">1</span>
+            <span style="text-align:center;font-weight:600">2</span>
+            <span style="text-align:center;font-weight:600">2</span>
+          </div>
+          <div style="display:flex;gap:12px;margin-top:8px;font-size:11px;color:var(--c-text-muted)">
+            <span style="color:#E53935">T&amp;M ↓ rückläufig</span>
+            <span style="color:#4CAF50">RfP ↑ wachsend</span>
+          </div>
+        </div>
+
+        <!-- Top nachgefragte Skills -->
+        <div class="kpi-card kpi-card--amber">
+          <div class="kpi-top">
+            <div class="kpi-label">Top nachgefragte<br>Skills</div>
+            <div class="kpi-icon" style="background:#FFF8E1">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#F9A825"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V17H7v2h10v-2h-4v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z"/></svg>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;margin-top:6px">
+            <div style="display:flex;align-items:center;gap:6px">
+              <span style="font-size:11px;width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Java</span>
+              <div style="flex:1;height:4px;background:#E0E0E0;border-radius:3px"><div style="width:100%;height:100%;background:#F9A825;border-radius:3px"></div></div>
+              <span style="font-size:10px;color:var(--c-text-muted);width:20px;text-align:right">5x</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px">
+              <span style="font-size:11px;width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Kubernetes</span>
+              <div style="flex:1;height:4px;background:#E0E0E0;border-radius:3px"><div style="width:80%;height:100%;background:#F9A825;border-radius:3px"></div></div>
+              <span style="font-size:10px;color:var(--c-text-muted);width:20px;text-align:right">4x</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px">
+              <span style="font-size:11px;width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">AWS</span>
+              <div style="flex:1;height:4px;background:#E0E0E0;border-radius:3px"><div style="width:80%;height:100%;background:#F9A825;border-radius:3px"></div></div>
+              <span style="font-size:10px;color:var(--c-text-muted);width:20px;text-align:right">4x</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px">
+              <span style="font-size:11px;width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Business Analysis</span>
+              <div style="flex:1;height:4px;background:#E0E0E0;border-radius:3px"><div style="width:60%;height:100%;background:#F9A825;border-radius:3px"></div></div>
+              <span style="font-size:10px;color:var(--c-text-muted);width:20px;text-align:right">3x</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px">
+              <span style="font-size:11px;width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Docker</span>
+              <div style="flex:1;height:4px;background:#E0E0E0;border-radius:3px"><div style="width:60%;height:100%;background:#F9A825;border-radius:3px"></div></div>
+              <span style="font-size:10px;color:var(--c-text-muted);width:20px;text-align:right">3x</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Top vorhandene Skills -->
+        <div class="kpi-card kpi-card--green">
+          <div class="kpi-top">
+            <div class="kpi-label">Top vorhandene<br>Skills</div>
+            <div class="kpi-icon" style="background:#E8F5E9">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#388E3C"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;margin-top:6px">
+            <div style="display:flex;align-items:center;gap:6px">
+              <span style="font-size:11px;width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Java</span>
+              <div style="flex:1;height:4px;background:#E0E0E0;border-radius:3px"><div style="width:100%;height:100%;background:#4CAF50;border-radius:3px"></div></div>
+              <span style="font-size:10px;color:var(--c-text-muted);width:20px;text-align:right">8x</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px">
+              <span style="font-size:11px;width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Python</span>
+              <div style="flex:1;height:4px;background:#E0E0E0;border-radius:3px"><div style="width:75%;height:100%;background:#4CAF50;border-radius:3px"></div></div>
+              <span style="font-size:10px;color:var(--c-text-muted);width:20px;text-align:right">6x</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px">
+              <span style="font-size:11px;width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">AWS</span>
+              <div style="flex:1;height:4px;background:#E0E0E0;border-radius:3px"><div style="width:63%;height:100%;background:#4CAF50;border-radius:3px"></div></div>
+              <span style="font-size:10px;color:var(--c-text-muted);width:20px;text-align:right">5x</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px">
+              <span style="font-size:11px;width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Docker</span>
+              <div style="flex:1;height:4px;background:#E0E0E0;border-radius:3px"><div style="width:63%;height:100%;background:#4CAF50;border-radius:3px"></div></div>
+              <span style="font-size:10px;color:var(--c-text-muted);width:20px;text-align:right">5x</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px">
+              <span style="font-size:11px;width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Kubernetes</span>
+              <div style="flex:1;height:4px;background:#E0E0E0;border-radius:3px"><div style="width:50%;height:100%;background:#4CAF50;border-radius:3px"></div></div>
+              <span style="font-size:10px;color:var(--c-text-muted);width:20px;text-align:right">4x</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Top fehlende Skills -->
+        <div class="kpi-card" style="border-left-color:#E53935">
+          <div class="kpi-top">
+            <div class="kpi-label">Top fehlende<br>Skills</div>
+            <div class="kpi-icon" style="background:#FFEBEE">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#E53935"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;margin-top:6px">
+            <div style="display:flex;align-items:center;gap:6px">
+              <span style="font-size:11px;width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Terraform</span>
+              <div style="flex:1;height:4px;background:#E0E0E0;border-radius:3px"><div style="width:100%;height:100%;background:#E53935;border-radius:3px"></div></div>
+              <span style="font-size:10px;color:var(--c-text-muted);width:20px;text-align:right">3x</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px">
+              <span style="font-size:11px;width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">SAP</span>
+              <div style="flex:1;height:4px;background:#E0E0E0;border-radius:3px"><div style="width:67%;height:100%;background:#E53935;border-radius:3px"></div></div>
+              <span style="font-size:10px;color:var(--c-text-muted);width:20px;text-align:right">2x</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px">
+              <span style="font-size:11px;width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Power BI</span>
+              <div style="flex:1;height:4px;background:#E0E0E0;border-radius:3px"><div style="width:67%;height:100%;background:#E53935;border-radius:3px"></div></div>
+              <span style="font-size:10px;color:var(--c-text-muted);width:20px;text-align:right">2x</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px">
+              <span style="font-size:11px;width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">GitOps</span>
+              <div style="flex:1;height:4px;background:#E0E0E0;border-radius:3px"><div style="width:67%;height:100%;background:#E53935;border-radius:3px"></div></div>
+              <span style="font-size:10px;color:var(--c-text-muted);width:20px;text-align:right">2x</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px">
+              <span style="font-size:11px;width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Argo CD</span>
+              <div style="flex:1;height:4px;background:#E0E0E0;border-radius:3px"><div style="width:33%;height:100%;background:#E53935;border-radius:3px"></div></div>
+              <span style="font-size:10px;color:var(--c-text-muted);width:20px;text-align:right">1x</span>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /insight-grid -->
+
+      <!-- ── Tabs ───────────────────────────────────────────────── -->
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="db-matches">Offene Matches <span class="section-count">(6)</span></button>
+        <button class="tab-btn" data-tab="db-rfp">RfP <span class="section-count">(2)</span></button>
+        <button class="tab-btn" data-tab="db-team">Mitarbeitende <span class="section-count" id="team-count">(10)</span></button>
+      </div>
+
+      <!-- ── Tab: Offene Matches ────────────────────────────────── -->
+      <div class="tab-panel active" id="tab-db-matches">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Mitarbeiter</th>
+              <th>Opportunity</th>
+              <th>Score</th>
+              <th>Status</th>
+              <th>Link</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="row-title">Anna Weber</span></td>
+              <td>Business Analysten IT-Consulting</td>
+              <td>
+                <div class="score-col" style="min-width:120px">
+                  <div class="score-bar-track" style="flex:1"><div class="score-bar-fill high" style="width:95%"></div></div>
+                  <span class="score-number">95</span>
+                </div>
+              </td>
+              <td><span class="pill pill-open">Offen</span></td>
+              <td class="link-cell"><a href="matches.html">Bewerten</a></td>
+            </tr>
+            <tr>
+              <td><span class="row-title">Michael Fischer</span></td>
+              <td>Container Plattform Initiative</td>
+              <td>
+                <div class="score-col" style="min-width:120px">
+                  <div class="score-bar-track" style="flex:1"><div class="score-bar-fill high" style="width:88%"></div></div>
+                  <span class="score-number">88</span>
+                </div>
+              </td>
+              <td><span class="pill pill-open">Offen</span></td>
+              <td class="link-cell"><a href="matches.html">Bewerten</a></td>
+            </tr>
+            <tr>
+              <td><span class="row-title">David Klein</span></td>
+              <td>Backend-Projekt Datenmigration</td>
+              <td>
+                <div class="score-col" style="min-width:120px">
+                  <div class="score-bar-track" style="flex:1"><div class="score-bar-fill high" style="width:83%"></div></div>
+                  <span class="score-number">83</span>
+                </div>
+              </td>
+              <td><span class="pill pill-open">Offen</span></td>
+              <td class="link-cell"><a href="matches.html">Bewerten</a></td>
+            </tr>
+            <tr>
+              <td><span class="row-title">Sophie Braun</span></td>
+              <td>Business Analysten IT-Consulting</td>
+              <td>
+                <div class="score-col" style="min-width:120px">
+                  <div class="score-bar-track" style="flex:1"><div class="score-bar-fill medium" style="width:71%"></div></div>
+                  <span class="score-number">71</span>
+                </div>
+              </td>
+              <td><span class="pill pill-open">Offen</span></td>
+              <td class="link-cell"><a href="matches.html">Bewerten</a></td>
+            </tr>
+            <tr>
+              <td><span class="row-title">Felix Weber</span></td>
+              <td>Backend-Projekt Datenmigration</td>
+              <td>
+                <div class="score-col" style="min-width:120px">
+                  <div class="score-bar-track" style="flex:1"><div class="score-bar-fill medium" style="width:69%"></div></div>
+                  <span class="score-number">69</span>
+                </div>
+              </td>
+              <td><span class="pill pill-open">Offen</span></td>
+              <td class="link-cell"><a href="matches.html">Bewerten</a></td>
+            </tr>
+            <tr>
+              <td><span class="row-title">Jana Richter</span></td>
+              <td>Backend-Projekt Datenmigration</td>
+              <td>
+                <div class="score-col" style="min-width:120px">
+                  <div class="score-bar-track" style="flex:1"><div class="score-bar-fill low" style="width:61%"></div></div>
+                  <span class="score-number">61</span>
+                </div>
+              </td>
+              <td><span class="pill pill-open">Offen</span></td>
+              <td class="link-cell"><a href="matches.html">Bewerten</a></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="section-footer">
+          <a href="matches.html" class="btn btn-outlined">Alle Matches ansehen &rarr;</a>
+        </div>
+      </div>
+
+      <!-- ── Tab: RfP ───────────────────────────────────────────── -->
+      <div class="tab-panel" id="tab-db-rfp">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Titel</th>
+              <th>Kunde</th>
+              <th>Abgabefrist</th>
+              <th>Phase</th>
+              <th>Rollen</th>
+              <th>Link</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <span class="row-title">Digital Insurance Platform</span>
+                <div style="font-size:11px;color:var(--c-text-muted)">RFP-0031</div>
+              </td>
+              <td>IPSWAYS / Insurance</td>
+              <td>
+                15.06.2026
+                <span style="margin-left:6px;font-size:10px;padding:1px 6px;border-radius:10px;background:#FFF3E0;color:#E65100;font-weight:600">24 Tage</span>
+              </td>
+              <td><span style="font-size:11px;padding:2px 8px;border-radius:12px;background:#FFF3E0;color:#E65100;border:1px solid #FFCC80;white-space:nowrap">Fragenphase</span></td>
+              <td>4 Positionen</td>
+              <td class="link-cell"><a href="rfp-detail.html">Öffnen</a></td>
+            </tr>
+            <tr>
+              <td>
+                <span class="row-title">Cloud Transformation</span>
+                <div style="font-size:11px;color:var(--c-text-muted)">RFP-0028</div>
+              </td>
+              <td>Deutsche Bank</td>
+              <td>
+                30.06.2026
+                <span style="margin-left:6px;font-size:10px;padding:1px 6px;border-radius:10px;background:#E8F5E9;color:#2E7D32;font-weight:600">39 Tage</span>
+              </td>
+              <td><span style="font-size:11px;padding:2px 8px;border-radius:12px;background:#E3F2FD;color:#1565C0;border:1px solid #90CAF9;white-space:nowrap">Qualifizierung</span></td>
+              <td>6 Positionen</td>
+              <td class="link-cell"><a href="rfp-detail.html">Öffnen</a></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="section-footer">
+          <a href="matches.html#rfp" class="btn btn-outlined">Alle RfPs ansehen &rarr;</a>
+        </div>
+      </div>
+
+      <!-- ── Tab: Mitarbeitende ─────────────────────────────────── -->
+      <div class="tab-panel" id="tab-db-team">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th class="sortable" data-sort="name" id="th-name">Mitarbeiter<span class="sort-ind"></span></th>
+              <th>Rolle</th>
+              <th class="sortable" data-sort="status" id="th-status">Status<span class="sort-ind"></span></th>
+              <th>Projekt</th>
+              <th>Verfügbar ab</th>
+            </tr>
+          </thead>
+          <tbody id="team-tbody"></tbody>
+        </table>
+      </div>
+
+    </div><!-- /page-content -->
+  </main>
+</div><!-- /app-shell -->
+
+<script src="features.js"></script>
+<script src="sidebar.js"></script>
+<script src="script.js"></script>
+<script>
+const TEAM_DATA = [
+  { name: 'Max Mustermann',  bu: 'Süd',  role: 'Senior Consultant',    sk: 'billable',  sl: 'Billable',       sc: 'pill-approved', ss: '',                                 project: 'Hypoteq AG — Backend-Projekt',   available: '01.08.2026',           so: 1 },
+  { name: 'Sandra Koch',     bu: 'Süd',  role: 'Consultant',           sk: 'billable',  sl: 'Billable',       sc: 'pill-approved', ss: '',                                 project: 'Backend-Projekt Datenmigration', available: '01.10.2026',           so: 1 },
+  { name: 'Michael Fischer', bu: 'Nord', role: 'DevOps Engineer',      sk: 'billable',  sl: 'Billable',       sc: 'pill-approved', ss: '',                                 project: 'Container Plattform Init.',      available: '01.01.2027',           so: 1 },
+  { name: 'Jana Richter',    bu: 'Nord', role: 'Consultant',           sk: 'billable',  sl: 'Billable',       sc: 'pill-approved', ss: '',                                 project: 'Stratify GmbH Prozessopt.',      available: '01.07.2026',           so: 1 },
+  { name: 'Sophie Braun',    bu: 'Nord', role: 'Scrum Master',         sk: 'reserved',  sl: 'Reserviert',     sc: 'pill-review',   ss: '',                                 project: 'Pipeline-Projekt ab 01.07.',     available: '01.07.2026',           so: 2 },
+  { name: 'Thomas Berger',   bu: 'Nord', role: 'Senior Consultant',    sk: 'ending',    sl: 'Endet bald',     sc: 'pill-review',   ss: 'background:#FCEBEB;color:#791F1F', project: 'BI-Beratung IVF',                available: '01.06.2026',           so: 3 },
+  { name: 'Lisa Müller',     bu: 'West', role: 'Principal Consultant', sk: 'parental',  sl: 'Elternzeit',     sc: 'pill-neutral',  ss: '',                                 project: '—',                              available: '01.07.2026 (Teilzeit)', so: 4 },
+  { name: 'Felix Weber',     bu: 'Süd',  role: 'Consultant',           sk: 'bench',     sl: 'Junior / Free',  sc: 'pill-neutral',  ss: 'background:#FFF3E0;color:#E65100', project: 'Interne Initiative',             available: 'Sofort',               so: 5 },
+  { name: 'Anna Weber',      bu: 'Süd',  role: 'Sr. Business Analyst', sk: 'bench',     sl: 'BENCH',          sc: 'pill-neutral',  ss: 'background:#FFF3E0;color:#E65100', project: '—',                              available: 'Sofort',               so: 5 },
+  { name: 'David Klein',     bu: 'West', role: 'Backend Developer',    sk: 'bench',     sl: 'BENCH',          sc: 'pill-neutral',  ss: 'background:#FFF3E0;color:#E65100', project: '—',                              available: 'Sofort',               so: 5 },
+];
+
+const MATCHES_BY_BU     = { Gesamt: 6, Süd: 2, Nord: 3, West: 1 };
+const RFP_MATCHES_BY_BU = { Gesamt: 2, Süd: 1, Nord: 1, West: 0 };
+
+let sortCol = 'status';
+let sortDir = 1;
+
+function applyBuFilter() {
+  const bu = document.getElementById('bu-filter').value;
+  const filtered = TEAM_DATA.filter(r => bu === 'Gesamt' || r.bu === bu);
+
+  /* ── KPI: Personen ── */
+  document.getElementById('kpi-total').textContent = filtered.length;
+  document.getElementById('kpi-total-sub').textContent = 'TCD ' + (bu === 'Gesamt' ? 'Gesamt' : bu);
+
+  /* ── KPI: Billable (billable + reserved + ending) ── */
+  const active = filtered.filter(r => r.sk === 'billable' || r.sk === 'reserved' || r.sk === 'ending');
+  const pct = filtered.length ? Math.round(active.length / filtered.length * 100) : 0;
+  document.getElementById('kpi-billable').textContent = pct + '%';
+  document.getElementById('kpi-billable-sub').textContent = active.length + ' von ' + filtered.length + ' Personen';
+
+  /* ── KPI: Jetzt verfügbar (bench) ── */
+  const bench = filtered.filter(r => r.sk === 'bench');
+  document.getElementById('kpi-bench').textContent = bench.length;
+  document.getElementById('kpi-bench-list').innerHTML = bench.length
+    ? bench.map(r => `<div class="kpi-person"><div class="kpi-person-dot" style="background:#F57C00"></div>${r.name}</div>`).join('')
+    : '<div style="font-size:12px;color:var(--c-text-muted);padding:4px 0">Keine Personen</div>';
+
+  /* ── KPI: Bald frei (ending) ── */
+  const ending = filtered.filter(r => r.sk === 'ending');
+  document.getElementById('kpi-ending').textContent = ending.length;
+  document.getElementById('kpi-ending-list').innerHTML = ending.length
+    ? ending.map(r => `<div class="kpi-person"><div class="kpi-person-dot" style="background:#FFA726"></div>${r.name} (endet 31.05.)</div>`).join('')
+    : '<div style="font-size:12px;color:var(--c-text-muted);padding:4px 0">Keine Personen</div>';
+
+  /* ── KPI: Offene Matches ── */
+  const tmMatches  = MATCHES_BY_BU[bu] ?? 0;
+  const rfpMatches = RFP_MATCHES_BY_BU[bu] ?? 0;
+  document.getElementById('kpi-matches').textContent = tmMatches + rfpMatches;
+  document.getElementById('kpi-matches-tm').textContent  = 'T&M ' + tmMatches;
+  document.getElementById('kpi-matches-rfp').textContent = 'RfP ' + rfpMatches;
+
+  /* ── Team-Tabelle ── */
+  let sorted = [...filtered];
+  if (sortCol === 'name') {
+    sorted.sort((a, b) => sortDir * a.name.localeCompare(b.name, 'de'));
+  } else {
+    sorted.sort((a, b) => {
+      const d = a.so - b.so;
+      if (d !== 0) return sortDir * d;
+      return a.name.localeCompare(b.name, 'de');
+    });
+  }
+
+  document.getElementById('team-count').textContent = '(' + sorted.length + ')';
+  document.getElementById('team-tbody').innerHTML = sorted.map(r => `
+    <tr>
+      <td><span class="row-title">${r.name}</span></td>
+      <td>${r.role}</td>
+      <td><span class="pill ${r.sc}" style="${r.ss}">${r.sl}</span></td>
+      <td>${r.project}</td>
+      <td>${r.available}</td>
+    </tr>`).join('');
+
+  document.querySelectorAll('th.sortable').forEach(th => {
+    th.classList.remove('sort-asc', 'sort-desc');
+    if (th.dataset.sort === sortCol) {
+      th.classList.add(sortDir === 1 ? 'sort-asc' : 'sort-desc');
+    }
+  });
+}
+
+document.querySelectorAll('th.sortable').forEach(th => {
+  th.addEventListener('click', () => {
+    if (sortCol === th.dataset.sort) { sortDir = -sortDir; }
+    else { sortCol = th.dataset.sort; sortDir = 1; }
+    applyBuFilter();
+  });
+});
+
+document.getElementById('bu-filter').addEventListener('change', applyBuFilter);
+applyBuFilter();
+</script>
+  <script src="feature-toggle.js"></script>
+</body>
+</html>

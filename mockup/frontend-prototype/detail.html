@@ -1,0 +1,304 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Opportunity Detail — Opportunity Hub</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- ── Sidebar ──────────────────────────────────────────────── -->
+  <aside class="sidebar"></aside>
+
+  <!-- ── Main ─────────────────────────────────────────────────── -->
+  <main class="main-content">
+
+    <!-- Breadcrumb + Detail Header -->
+    <div class="detail-header">
+      <div class="breadcrumb-nav" id="breadcrumb">
+        <a href="my-opportunities.html">Meine Opportunities</a>
+        <span class="sep">›</span>
+        <span id="breadcrumb-title">Opportunity</span>
+      </div>
+      <h1 id="detail-title" style="margin-bottom:4px">—</h1>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap">
+        <span id="detail-status-pill"></span>
+        <span id="detail-meta-line" style="font-size:13px;color:var(--c-text-muted)"></span>
+        <button class="bookmark-btn-detail" id="detail-bookmark-btn" onclick="toggleDetailBookmark()">
+          <span class="bm-star">☆</span> Speichern
+        </button>
+      </div>
+    </div>
+
+    <!-- Stat Cards -->
+    <div class="stat-cards">
+      <div class="stat-card">
+        <div class="stat-label">Gesamt</div>
+        <div class="stat-value" id="stat-total">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Genehmigt</div>
+        <div class="stat-value" style="color: var(--pill-approved-text)" id="stat-approved">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">In Prüfung</div>
+        <div class="stat-value" style="color: var(--pill-review-text)" id="stat-review">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Abgelehnt</div>
+        <div class="stat-value" style="color: var(--pill-rejected-text)" id="stat-rejected">—</div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="matches">Matches</button>
+      <button class="tab-btn" data-tab="history">Status &amp; Historie</button>
+      <button class="tab-btn" data-tab="details">Details</button>
+    </div>
+
+    <div class="page-content">
+
+      <!-- ── Tab: Matches ─────────────────────────────────────── -->
+      <div id="tab-matches" class="tab-panel active">
+
+        <div class="match-filter-bar">
+          <div class="filter-group">
+            <label for="filter-manager">Manager</label>
+            <select id="filter-manager" class="input-outlined">
+              <option value="">Alle</option>
+              <option>Anna Schmidt</option>
+              <option>Klaus Bauer</option>
+              <option>Marco Lehmann</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="filter-status-m">Status</label>
+            <select id="filter-status-m" class="input-outlined">
+              <option value="">Alle</option>
+              <option>Offen</option>
+              <option>In Prüfung</option>
+              <option>Genehmigt</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Gruppe 1: Direkt verfügbar -->
+        <div class="match-group">
+          <div class="match-group-header available">3 Kandidaten &nbsp;·&nbsp; Direkt verfügbar</div>
+          <div class="match-group-subtitle">Aktuell verfügbar</div>
+
+          <div class="candidate-row">
+            <div class="avatar" style="background:#1976D2">MM</div>
+            <div class="candidate-info">
+              <div class="candidate-name">Max Mustermann</div>
+              <div class="candidate-role">Senior Consultant</div>
+              <div><span class="chip">Java</span><span class="chip">AWS</span><span class="chip">Docker</span><span class="chip">+1</span></div>
+            </div>
+            <div class="candidate-manager">Anna Schmidt</div>
+            <div class="score-col">
+              <span class="score-label">Score</span>
+              <div class="score-bar-track"><div class="score-bar-fill high" style="width:91%"></div></div>
+              <span class="score-number">91</span>
+            </div>
+            <span class="pill pill-approved">Genehmigt</span>
+            <button class="btn btn-outlined btn-sm">Details</button>
+          </div>
+
+          <div class="candidate-row">
+            <div class="avatar" style="background:#388E3C">SK</div>
+            <div class="candidate-info">
+              <div class="candidate-name">Sandra Koch</div>
+              <div class="candidate-role">Consultant</div>
+              <div><span class="chip">Java</span><span class="chip">Spring</span><span class="chip">Kafka</span></div>
+            </div>
+            <div class="candidate-manager">Anna Schmidt</div>
+            <div class="score-col">
+              <span class="score-label">Score</span>
+              <div class="score-bar-track"><div class="score-bar-fill high" style="width:84%"></div></div>
+              <span class="score-number">84</span>
+            </div>
+            <span class="pill pill-review">In Prüfung</span>
+            <button class="btn btn-outlined btn-sm">Details</button>
+          </div>
+
+          <div class="candidate-row">
+            <div class="avatar" style="background:#37474F">DK</div>
+            <div class="candidate-info">
+              <div class="candidate-name">David Klein</div>
+              <div class="candidate-role">Backend Developer</div>
+              <div><span class="chip">Java</span><span class="chip">AWS</span><span class="chip">Docker</span><span class="chip">+1</span></div>
+            </div>
+            <div class="candidate-manager">Anna Schmidt</div>
+            <div class="score-col">
+              <span class="score-label">Score</span>
+              <div class="score-bar-track"><div class="score-bar-fill high" style="width:83%"></div></div>
+              <span class="score-number">83</span>
+            </div>
+            <span class="pill pill-neutral">Offen</span>
+            <button class="btn btn-outlined btn-sm">Details</button>
+          </div>
+        </div>
+
+        <!-- Gruppe 2: Bald verfügbar -->
+        <div class="match-group">
+          <div class="match-group-header soon">2 Kandidaten &nbsp;·&nbsp; Bald verfügbar</div>
+          <div class="match-group-subtitle">Werden voraussichtlich ab 01.06.2026 frei</div>
+
+          <div class="candidate-row">
+            <div class="avatar" style="background:#7B1FA2">TB</div>
+            <div class="candidate-info">
+              <div class="candidate-name">Thomas Berger</div>
+              <div class="candidate-role">Senior Consultant</div>
+              <div><span class="chip">AWS</span><span class="chip">Terraform</span><span class="chip">CI/CD</span></div>
+            </div>
+            <div class="candidate-manager">Klaus Bauer</div>
+            <div class="score-col">
+              <span class="score-label">Score</span>
+              <div class="score-bar-track"><div class="score-bar-fill medium" style="width:78%"></div></div>
+              <span class="score-number">78</span>
+            </div>
+            <span class="pill pill-review">In Prüfung</span>
+            <button class="btn btn-outlined btn-sm">Details</button>
+          </div>
+
+          <div class="candidate-row">
+            <div class="avatar" style="background:#0097A7">LM</div>
+            <div class="candidate-info">
+              <div class="candidate-name">Lisa Müller</div>
+              <div class="candidate-role">Principal Consultant</div>
+              <div><span class="chip">Java</span><span class="chip">SQL</span><span class="chip">Maven</span><span class="chip">+2</span></div>
+            </div>
+            <div class="candidate-manager">Marco Lehmann</div>
+            <div class="score-col">
+              <span class="score-label">Score</span>
+              <div class="score-bar-track"><div class="score-bar-fill medium" style="width:74%"></div></div>
+              <span class="score-number">74</span>
+            </div>
+            <span class="pill pill-neutral">Offen</span>
+            <button class="btn btn-outlined btn-sm">Details</button>
+          </div>
+        </div>
+
+        <!-- Gruppe 3: Teilweise verfügbar -->
+        <div class="match-group">
+          <div class="match-group-header partial">2 Kandidaten &nbsp;·&nbsp; Teilweise verfügbar</div>
+          <div class="match-group-subtitle">Kapazität &lt; 100 %</div>
+
+          <div class="candidate-row">
+            <div class="avatar" style="background:#F57C00">FW</div>
+            <div class="candidate-info">
+              <div class="candidate-name">Felix Weber</div>
+              <div class="candidate-role">Consultant</div>
+              <div><span class="chip">AWS</span><span class="chip">Lambda</span><span class="chip">Docker</span></div>
+            </div>
+            <div class="candidate-manager">Anna Schmidt</div>
+            <div class="score-col">
+              <span class="score-label">Score</span>
+              <div class="score-bar-track"><div class="score-bar-fill medium" style="width:69%"></div></div>
+              <span class="score-number">69</span>
+            </div>
+            <span class="pill pill-neutral">Offen</span>
+            <button class="btn btn-outlined btn-sm">Details</button>
+          </div>
+
+          <div class="candidate-row">
+            <div class="avatar" style="background:#E53935">JR</div>
+            <div class="candidate-info">
+              <div class="candidate-name">Jana Richter</div>
+              <div class="candidate-role">Consultant</div>
+              <div><span class="chip">Java</span><span class="chip">SQL</span></div>
+            </div>
+            <div class="candidate-manager">Klaus Bauer</div>
+            <div class="score-col">
+              <span class="score-label">Score</span>
+              <div class="score-bar-track"><div class="score-bar-fill low" style="width:61%"></div></div>
+              <span class="score-number">61</span>
+            </div>
+            <span class="pill pill-neutral">Offen</span>
+            <button class="btn btn-outlined btn-sm">Details</button>
+          </div>
+        </div>
+
+      </div><!-- /tab-matches -->
+
+      <!-- ── Tab: Historie ─────────────────────────────────────── -->
+      <div id="tab-history" class="tab-panel">
+        <p class="placeholder-text">Aktivitäts-Timeline — wird in Phase 1 implementiert</p>
+      </div>
+
+      <!-- ── Tab: Details (data-driven) ───────────────────────── -->
+      <div id="tab-details" class="tab-panel">
+        <div id="opp-detail-content"></div>
+      </div>
+
+    </div><!-- /page-content -->
+  </main>
+
+</div><!-- /app-shell -->
+
+<script src="features.js"></script>
+<script src="sidebar.js"></script>
+<script src="script.js"></script>
+<script src="opp-data.js"></script>
+<script>
+(function () {
+  const params = new URLSearchParams(window.location.search);
+  const id     = params.get('id') || 'oph-1247';
+  const opp    = OPP_DATA[id];
+
+  /* Stat data per opportunity */
+  const STATS = {
+    'oph-1247': { total: 7, approved: 1, review: 2, rejected: 0 },
+    'oph-1248': { total: 5, approved: 0, review: 3, rejected: 1 },
+    'oph-1249': { total: 7, approved: 2, review: 4, rejected: 1 },
+  };
+
+  if (opp) {
+    document.title = `${opp.title} — Opportunity Hub`;
+    document.getElementById('breadcrumb-title').textContent = opp.title;
+    document.getElementById('detail-title').textContent     = opp.title;
+    document.getElementById('detail-status-pill').innerHTML =
+      `<span class="pill ${opp.status.cls}">${opp.status.label}</span>`;
+    document.getElementById('detail-meta-line').textContent =
+      `${opp.client} · Erstellt am ${opp.created} · ${opp.creator}`;
+
+    const s = STATS[id] || { total: 0, approved: 0, review: 0, rejected: 0 };
+    document.getElementById('stat-total').textContent    = s.total;
+    document.getElementById('stat-approved').textContent = s.approved;
+    document.getElementById('stat-review').textContent   = s.review;
+    document.getElementById('stat-rejected').textContent = s.rejected;
+  }
+
+  /* Render Details tab */
+  renderDetailContent(id, 'opp-detail-content');
+
+  /* Bookmark */
+  const SAVED_KEY = 'savedOpps';
+  function getSaved() { try { return JSON.parse(localStorage.getItem(SAVED_KEY)) || []; } catch { return []; } }
+  const bmBtn = document.getElementById('detail-bookmark-btn');
+  if (bmBtn) {
+    if (getSaved().includes(id)) { bmBtn.querySelector('.bm-star').textContent = '★'; bmBtn.classList.add('saved'); }
+    window.toggleDetailBookmark = function () {
+      const saved = getSaved();
+      const idx   = saved.indexOf(id);
+      if (idx >= 0) { saved.splice(idx, 1); bmBtn.querySelector('.bm-star').textContent = '☆'; bmBtn.classList.remove('saved'); }
+      else          { saved.push(id);       bmBtn.querySelector('.bm-star').textContent = '★'; bmBtn.classList.add('saved'); }
+      localStorage.setItem(SAVED_KEY, JSON.stringify(saved));
+    };
+  }
+
+  /* Switch to Details tab if hash is #details */
+  if (window.location.hash === '#details') {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelector('[data-tab="details"]').classList.add('active');
+    document.getElementById('tab-details').classList.add('active');
+  }
+})();
+</script>
+  <script src="feature-toggle.js"></script>
+</body>
+</html>

@@ -1,0 +1,302 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Neue Opportunity — Manuell — Opportunity Hub</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- ── Sidebar ──────────────────────────────────────────────── -->
+  <aside class="sidebar"></aside>
+
+  <!-- ── Main ─────────────────────────────────────────────────── -->
+  <main class="main-content">
+
+    <header class="page-header">
+      <div>
+        <a href="new-opportunity.html" class="breadcrumb">← Modus-Auswahl</a>
+        <div class="step-indicator" style="margin-top: 6px;">Schritt 2 von 3</div>
+        <h1>Neue Opportunity</h1>
+      </div>
+    </header>
+
+    <div class="page-content">
+      <form id="opportunity-form" class="form-wrapper" novalidate>
+
+        <!-- ── 1. Projekt ──────────────────────────────────────── -->
+        <section class="form-section">
+          <h2 class="form-section-title">Projekt</h2>
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="title">Titel <span class="required">*</span></label>
+              <input
+                type="text"
+                id="title"
+                name="title"
+                class="input-outlined"
+                placeholder="z. B. Backend-Migration AWS"
+                required
+                autocomplete="off"
+              />
+              <span class="field-error" id="title-error"></span>
+            </div>
+            <div class="form-field">
+              <label for="client">Kunde / Projekt</label>
+              <input
+                type="text"
+                id="client"
+                name="client"
+                class="input-outlined"
+                placeholder="z. B. Hypoteq AG"
+                autocomplete="off"
+              />
+            </div>
+          </div>
+        </section>
+
+        <!-- ── 2. Ziele & Aufgaben ─────────────────────────────── -->
+        <section class="form-section">
+          <h2 class="form-section-title">Ziele &amp; Aufgaben</h2>
+          <div class="form-field">
+            <label for="goal">Projektziel <span class="required">*</span></label>
+            <textarea
+              id="goal"
+              name="goal"
+              class="input-outlined"
+              rows="3"
+              placeholder="Was soll mit diesem Projekt erreicht werden?"
+              required
+            ></textarea>
+            <span class="field-error" id="goal-error"></span>
+          </div>
+          <div class="form-field">
+            <label for="tasks">Aufgaben</label>
+            <textarea
+              id="tasks"
+              name="tasks"
+              class="input-outlined"
+              rows="3"
+              placeholder="Welche Tätigkeiten sind konkret vorgesehen?"
+            ></textarea>
+          </div>
+        </section>
+
+        <!-- ── 3. Geforderte Skills ────────────────────────────── -->
+        <section class="form-section">
+          <h2 class="form-section-title">Geforderte Skills</h2>
+          <div class="form-field">
+            <label>Fachliche Skills <span style="font-size:11px;color:var(--c-text-muted);font-weight:400">(Skill + Anforderungsniveau 1–5 Sterne)</span></label>
+            <div class="skill-rows" id="skill-rows">
+              <!-- populated by JS -->
+            </div>
+            <button type="button" class="btn btn-outlined btn-sm" id="add-skill-btn" style="margin-top:8px">+ Skill hinzufügen</button>
+            <div class="skill-suggestions" style="margin-top:12px">
+              <span class="suggestion-label">Vorschläge:</span>
+              <button type="button" class="chip-suggest" data-skill="AWS">AWS</button>
+              <button type="button" class="chip-suggest" data-skill="Azure">Azure</button>
+              <button type="button" class="chip-suggest" data-skill="Java">Java</button>
+              <button type="button" class="chip-suggest" data-skill="Python">Python</button>
+              <button type="button" class="chip-suggest" data-skill="SAP">SAP</button>
+              <button type="button" class="chip-suggest" data-skill="SQL">SQL</button>
+              <button type="button" class="chip-suggest" data-skill="Power BI">Power BI</button>
+              <button type="button" class="chip-suggest" data-skill="DevOps">DevOps</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── 4. Zeitleiste & Auslastung ─────────────────────── -->
+        <section class="form-section">
+          <h2 class="form-section-title">Zeitleiste &amp; Auslastung</h2>
+          <div class="form-grid form-grid-3">
+            <div class="form-field">
+              <label for="start-date">Startdatum <span class="required">*</span></label>
+              <input
+                type="date"
+                id="start-date"
+                name="start_date"
+                class="input-outlined"
+                required
+              />
+              <span class="field-error" id="start-date-error"></span>
+            </div>
+            <div class="form-field">
+              <label for="end-date">Enddatum</label>
+              <input
+                type="date"
+                id="end-date"
+                name="end_date"
+                class="input-outlined"
+              />
+              <span class="field-error" id="end-date-error"></span>
+            </div>
+            <div class="form-field">
+              <label for="workload">Auslastung</label>
+              <select id="workload" name="workload" class="input-outlined">
+                <option value="">— wählen —</option>
+                <option value="25">25 %</option>
+                <option value="50">50 %</option>
+                <option value="75">75 %</option>
+                <option value="100">100 %</option>
+              </select>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── 5. Konditionen & Relevanz ─────────────────────── -->
+        <section class="form-section">
+          <h2 class="form-section-title">Konditionen &amp; Relevanz</h2>
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="submission-date">Abgabe Termin</label>
+              <input
+                type="date"
+                id="submission-date"
+                name="submission_date"
+                class="input-outlined"
+              />
+              <span style="font-size:11px;color:var(--c-text-muted)">Frist zur Einreichung / Entscheidung</span>
+            </div>
+            <div class="form-field">
+              <label for="day-rate">Tagessatz (€)</label>
+              <input
+                type="number"
+                id="day-rate"
+                name="day_rate"
+                class="input-outlined"
+                placeholder="z. B. 1200"
+                min="0"
+                step="50"
+              />
+            </div>
+          </div>
+          <div class="form-grid form-grid-3">
+            <div class="form-field">
+              <label for="onsite-remote">Onsite / Remote</label>
+              <select id="onsite-remote" name="onsite_remote" class="input-outlined">
+                <option value="">— wählen —</option>
+                <option value="onsite">Vor Ort</option>
+                <option value="hybrid">Hybrid</option>
+                <option value="remote">Remote</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="budget-days">Budget / Projekttage</label>
+              <input
+                type="number"
+                id="budget-days"
+                name="budget_days"
+                class="input-outlined"
+                placeholder="z. B. 120"
+                min="0"
+              />
+            </div>
+            <div class="form-field">
+              <label for="fincon-relevanz">FinCon Company Relevanz</label>
+              <select id="fincon-relevanz" name="fincon_relevanz" class="input-outlined">
+                <option value="">— wählen —</option>
+                <option value="hoch">Hoch</option>
+                <option value="mittel">Mittel</option>
+                <option value="niedrig">Niedrig</option>
+              </select>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── 6. Links & Anhänge ────────────────────────────── -->
+        <section class="form-section">
+          <h2 class="form-section-title">Links &amp; Anhänge</h2>
+          <div id="link-rows" style="display:flex;flex-direction:column;gap:8px"></div>
+          <button type="button" class="btn btn-outlined btn-sm" id="add-link-btn" style="margin-top:8px">+ Link / Anhang hinzufügen</button>
+          <div style="font-size:12px;color:var(--c-text-muted);margin-top:6px">Ausschreibungsdokument, E-Mail, SharePoint-Link, etc.</div>
+        </section>
+
+        <!-- ── Actions ─────────────────────────────────────────── -->
+        <div class="form-actions">
+          <a href="my-opportunities.html" class="btn btn-text">Abbrechen</a>
+          <div style="display: flex; gap: 8px;">
+            <button type="button" class="btn btn-text" onclick="location.href='my-opportunities.html'">
+              Entwurf speichern
+            </button>
+            <button type="submit" id="submit-btn" class="btn btn-primary" disabled>
+              Matches finden
+            </button>
+          </div>
+        </div>
+
+      </form>
+    </div><!-- /page-content -->
+  </main>
+
+</div><!-- /app-shell -->
+<script src="features.js"></script>
+<script src="sidebar.js"></script>
+<script src="script.js"></script>
+<script>
+(function () {
+  // NOTE: STAR_LABELS duplicates STAR_LEVELS in opp-data.js — kept here intentionally
+  // since this file does not load opp-data.js and adding that dependency just to remove
+  // one constant would introduce an unjustified coupling.
+  const STAR_LABELS = { 5: 'Expert', 4: 'Erfahren', 3: 'Mittel', 2: 'Grundkenntnisse', 1: 'Einsteiger' };
+  let skillIdx = 0;
+  const skillRowsEl = document.getElementById('skill-rows');
+
+  function createSkillRow(name, stars) {
+    name  = name  || '';
+    stars = stars || 3;
+    const idx = skillIdx++;
+    const div = document.createElement('div');
+    div.className = 'skill-row';
+    const starsHtml = [5, 4, 3, 2, 1].map(n =>
+      `<input type="radio" id="sr-${idx}-${n}" name="skill-stars-${idx}" value="${n}" ${n === stars ? 'checked' : ''} />` +
+      `<label for="sr-${idx}-${n}" title="${STAR_LABELS[n]}">★</label>`
+    ).join('');
+    div.innerHTML =
+      `<input type="text" class="skill-row-name input-outlined" value="${name}" placeholder="Skill-Name" autocomplete="off" />` +
+      `<div class="star-input">${starsHtml}</div>` +
+      `<span class="skill-row-level-label">${STAR_LABELS[stars]}</span>` +
+      `<button type="button" class="skill-row-remove" title="Entfernen">✕</button>`;
+
+    div.querySelectorAll('input[type="radio"]').forEach(r => {
+      r.addEventListener('change', () => {
+        div.querySelector('.skill-row-level-label').textContent = STAR_LABELS[+r.value];
+      });
+    });
+    div.querySelector('.skill-row-remove').addEventListener('click', () => div.remove());
+    return div;
+  }
+
+  if (skillRowsEl) {
+    ['Java', 'AWS', 'Docker'].forEach(s => skillRowsEl.appendChild(createSkillRow(s, 3)));
+
+    document.getElementById('add-skill-btn')
+      .addEventListener('click', () => skillRowsEl.appendChild(createSkillRow('', 3)));
+
+    document.querySelectorAll('.chip-suggest').forEach(btn => {
+      btn.addEventListener('click', () => skillRowsEl.appendChild(createSkillRow(btn.dataset.skill, 3)));
+    });
+  }
+
+  // Link rows
+  var linkIdx = 0;
+  var linkRowsEl = document.getElementById('link-rows');
+  function createLinkRow() {
+    var idx = linkIdx++;
+    var div = document.createElement('div');
+    div.style.cssText = 'display:flex;gap:8px;align-items:center';
+    div.innerHTML =
+      '<input type="text" class="input-outlined" placeholder="https:// oder Dateiname" style="flex:1" />' +
+      '<input type="text" class="input-outlined" placeholder="Beschreibung (optional)" style="width:200px" />' +
+      '<button type="button" class="skill-row-remove" title="Entfernen">✕</button>';
+    div.querySelector('.skill-row-remove').addEventListener('click', () => div.remove());
+    return div;
+  }
+  document.getElementById('add-link-btn') &&
+    document.getElementById('add-link-btn').addEventListener('click', () => linkRowsEl.appendChild(createLinkRow()));
+})();
+</script>
+  <script src="feature-toggle.js"></script>
+</body>
+</html>

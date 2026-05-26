@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Exports — Opportunity Hub</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar"></aside>
+  <main class="main-content">
+    <header class="page-header">
+      <h1>Exports</h1>
+    </header>
+    <div class="page-content">
+      <div class="export-section">
+        <h2>Berichte &amp; Exporte</h2>
+
+        <div class="export-card">
+          <div class="excel-file-icon">X</div>
+          <div class="export-card-info">
+            <div class="export-card-title">Dispoliste</div>
+            <div class="export-card-desc">Teamauslastung inkl. BENCH-Status, BU/Team, Level, Tagessatz, Kunde, Region, Mobilität und Verfügbarkeitszeiträume</div>
+          </div>
+          <button class="btn-excel" onclick="exportDispoliste()">
+            <span class="btn-excel-logo">X</span>
+            Als Excel exportieren
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="features.js"></script>
+<script src="sidebar.js"></script>
+<script src="script.js"></script>
+<script>
+function exportDispoliste() {
+  const rows = [
+    ['BENCH','BU-ID','TEAM-ID','Name','Level','DayRate (min)','Teamlead','Customer','Offered to','Comments','Part-Time','Region','Mobility','Typ','Von','Bis','Projekt / Notiz'],
+    ['Nein','FC-BU-01','TEAM-AS','Max Mustermann',  'Senior Consultant',   '1100','Anna Schmidt','Hypoteq AG',          'Backend-Projekt Datenmigration',                 'Verlängerung wahrscheinlich',      'Nein','München',    'Hybrid',         'Billable',                       '01.01.2026','31.07.2026','Backend-Projekt Datenmigration'],
+    ['Nein','FC-BU-01','TEAM-AS','Max Mustermann',  'Senior Consultant',   '1100','Anna Schmidt','',                    'Cloud Architect AWS',                            'Reserviert für Folgeprojekt',      'Nein','München',    'Hybrid',         'Reserved for upcoming Projects', '01.08.2026','31.10.2026','Cloud Architect AWS (Pipeline)'],
+    ['Ja',  'FC-BU-01','TEAM-AS','Sandra Koch',     'Consultant',          '850', 'Anna Schmidt','',                    '',                                               'Bench-Phase Q1',                   'Nein','München',    'Onsite',         'BENCH',                          '01.01.2026','28.02.2026',''],
+    ['Nein','FC-BU-01','TEAM-AS','Sandra Koch',     'Consultant',          '850', 'Anna Schmidt','Hypoteq AG',          'Backend-Projekt Datenmigration',                 'Rückkehr nach Krankheit März',     'Nein','München',    'Onsite',         'Billable',                       '01.03.2026','30.09.2026','Backend-Projekt Datenmigration'],
+    ['Ja',  'FC-BU-01','TEAM-AS','Felix Weber',     'Consultant',          '750', 'Anna Schmidt','',                    'Business Analysten IT-Consulting',               'Junior-Ressource verfügbar',       'Nein','München',    'Remote',         'BENCH',                          '01.01.2026','30.04.2026',''],
+    ['Nein','FC-BU-01','TEAM-AS','Felix Weber',     'Consultant',          '750', 'Anna Schmidt','',                    'Business Analysten IT-Consulting',               'Interne Förderung',                'Nein','München',    'Remote',         'Junior / free of charge',        '01.05.2026','31.08.2026','Interne Initiative'],
+    ['Nein','FC-BU-01','TEAM-AS','Felix Weber',     'Consultant',          '750', 'Anna Schmidt','',                    'Prozessoptimierung Produktion',                  'Reserviert',                       'Nein','München',    'Remote',         'Reserved for upcoming Projects', '01.09.2026','31.12.2026','Prozessoptimierung Produktion'],
+    ['Nein','FC-BU-02','TEAM-KB','Thomas Berger',   'Senior Consultant',   '1050','Klaus Bauer', 'Sweden Life',         'Container Plattform Initiative',                 'Prolongation möglich',             'Nein','Hamburg',    'Remote',         'Billable',                       '01.01.2026','31.05.2026','BI-Beratung IVF Verbesserung'],
+    ['Nein','FC-BU-02','TEAM-KB','Thomas Berger',   'Senior Consultant',   '1050','Klaus Bauer', 'Sweden Life',         'Container Plattform Initiative',                 'Option auf Verlängerung',          'Nein','Hamburg',    'Remote',         'Prolongation possible',          '01.06.2026','31.08.2026','BI-Beratung IVF Verbesserung'],
+    ['Ja',  'FC-BU-02','TEAM-KB','Thomas Berger',   'Senior Consultant',   '1050','Klaus Bauer', '',                    '',                                               'Verfügbar ab September',           'Nein','Hamburg',    'Remote',         'BENCH',                          '01.09.2026','31.12.2026',''],
+    ['Nein','FC-BU-02','TEAM-KB','Jana Richter',    'Consultant',          '800', 'Klaus Bauer', 'Stratify GmbH',       '',                                               '',                                 'Nein','Frankfurt',  'Hybrid',         'Billable',                       '01.02.2026','30.06.2026','Stratify GmbH Prozessopt.'],
+    ['Ja',  'FC-BU-02','TEAM-KB','Jana Richter',    'Consultant',          '800', 'Klaus Bauer', '',                    '',                                               'Verfügbar ab Juli',                'Nein','Frankfurt',  'Hybrid',         'BENCH',                          '01.07.2026','31.12.2026',''],
+    ['Nein','FC-BU-03','TEAM-ML','Lisa Müller',     'Principal Consultant','1400','Marco Lehmann','',                   '',                                               'Elternzeit',                       'Ja',  'Düsseldorf', 'Remote',         'Parental leave',                 '01.01.2026','30.06.2026',''],
+    ['Nein','FC-BU-03','TEAM-ML','Lisa Müller',     'Principal Consultant','1400','Marco Lehmann','',                   '',                                               'Rückkehr Teilzeit ab Juli',        'Ja',  'Düsseldorf', 'Remote',         'Parttime availability',          '01.07.2026','31.12.2026','Rückkehr Teilzeit'],
+    ['Ja',  'FC-BU-01','TEAM-AS','Anna Weber',      'Sr. Business Analyst','950', 'Anna Schmidt','',                    'Business Analysten IT-Consulting; Backend-Projekt','Hohe Match-Score, sofort verfügbar','Nein','Berlin',   'Deutschlandweit','BENCH',                          '01.01.2026','31.12.2026',''],
+    ['Nein','FC-BU-02','TEAM-KB','Michael Fischer', 'DevOps Engineer',     '1000','Klaus Bauer', 'Interne Initiative',  '',                                               'Langzeitprojekt intern',           'Nein','Hamburg',    'Remote',         'Billable',                       '01.01.2026','31.12.2026','Container Plattform Init.'],
+    ['Nein','FC-BU-03','TEAM-ML','Sophie Braun',    'Scrum Master',        '900', 'Marco Lehmann','',                   'Business Analysten IT-Consulting',               'Reserviert ab Juli',               'Nein','Köln',       'Hybrid',         'Reserved for upcoming Projects', '01.01.2026','31.12.2026','Pipeline-Projekt ab 01.07.'],
+    ['Ja',  'FC-BU-01','TEAM-AS','David Klein',     'Backend Developer',   '850', 'Anna Schmidt','',                    'Backend-Projekt Datenmigration',                 'Sofort verfügbar, starke Java-Kenntnisse','Nein','München','Hybrid',      'BENCH',                          '01.01.2026','31.12.2026',''],
+  ];
+
+  const csv = rows.map(r => r.map(c => `"${c.replace(/"/g, '""')}"`).join(';')).join('\r\n');
+  const BOM  = '﻿';
+  const blob = new Blob([BOM + csv], { type: 'text/csv;charset=utf-8;' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = 'Dispoliste_2026.csv';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showSnackbar('Dispoliste wird heruntergeladen…');
+}
+</script>
+  <script src="feature-toggle.js"></script>
+</body>
+</html>

@@ -1,0 +1,606 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Administration — Opportunity Hub</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- ── Sidebar ──────────────────────────────────────────────── -->
+  <aside class="sidebar"></aside>
+
+  <!-- ── Main Content ─────────────────────────────────────────── -->
+  <main class="main-content">
+
+    <!-- Page Header -->
+    <header class="page-header">
+      <div>
+        <h1>Administration</h1>
+        <p class="page-subtitle">Benutzerverwaltung &amp; Rollenzuweisung</p>
+      </div>
+      <button class="btn btn-primary" id="add-user-btn">+ Benutzer hinzufügen</button>
+    </header>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="users">Benutzer</button>
+      <button class="tab-btn" data-tab="roles">Rollen &amp; Berechtigungen</button>
+    </div>
+
+    <div class="page-content">
+
+      <!-- ── Tab 1: Benutzer ─────────────────────────────────── -->
+      <div class="tab-panel active" id="tab-users">
+
+        <!-- Filter bar -->
+        <div class="filter-bar">
+          <div class="filter-group">
+            <label for="search-input">Suche</label>
+            <input id="search-input" class="input-outlined" type="text" placeholder="Name oder Rolle …" style="min-width:220px;" />
+          </div>
+          <div class="filter-group">
+            <label for="role-filter">Rolle</label>
+            <select id="role-filter" class="input-outlined">
+              <option value="">Alle Rollen</option>
+              <option value="BU-Leitung">BU-Leitung</option>
+              <option value="Führungskraft">Führungskraft</option>
+              <option value="Senior Consultant">Senior Consultant</option>
+              <option value="Principal Consultant">Principal Consultant</option>
+              <option value="Consultant">Consultant</option>
+              <option value="Backend Developer">Backend Developer</option>
+              <option value="DevOps Engineer">DevOps Engineer</option>
+              <option value="Scrum Master">Scrum Master</option>
+              <option value="Sr. Business Analyst">Sr. Business Analyst</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-wrapper">
+          <table class="data-table" id="users-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>E-Mail</th>
+                <th>Rolle</th>
+                <th>Team / BU</th>
+                <th>Manager</th>
+                <th>Status</th>
+                <th>Aktionen</th>
+              </tr>
+            </thead>
+            <tbody id="users-tbody">
+
+              <!-- BU-Leitung -->
+              <tr data-name="Jannik Schröder" data-role="BU-Leitung">
+                <td>
+                  <div class="user-cell">
+                    <div class="user-avatar" style="background:#1256A0;">JS</div>
+                    <span class="user-name">Jannik Schröder</span>
+                  </div>
+                </td>
+                <td style="color:var(--c-text-muted);font-size:13px;">j.schroeder@reply.de</td>
+                <td><span class="pill role-bu-leitung">BU-Leitung</span></td>
+                <td style="font-size:13px;">BU Consulting</td>
+                <td style="font-size:13px;color:var(--c-text-muted);">—</td>
+                <td><span class="pill pill-approved">Aktiv</span></td>
+                <td><button class="btn-edit" data-user="Jannik Schröder">Bearbeiten</button></td>
+              </tr>
+
+              <!-- Führungskräfte -->
+              <tr data-name="Anna Schmidt" data-role="Führungskraft">
+                <td>
+                  <div class="user-cell">
+                    <div class="user-avatar" style="background:#0F6E56;">AS</div>
+                    <span class="user-name">Anna Schmidt</span>
+                  </div>
+                </td>
+                <td style="color:var(--c-text-muted);font-size:13px;">a.schmidt@reply.de</td>
+                <td><span class="pill role-fuehrungskraft">Führungskraft</span></td>
+                <td style="font-size:13px;">BU Consulting</td>
+                <td style="font-size:13px;">Jannik Schröder</td>
+                <td><span class="pill pill-approved">Aktiv</span></td>
+                <td><button class="btn-edit" data-user="Anna Schmidt">Bearbeiten</button></td>
+              </tr>
+
+              <tr data-name="Klaus Bauer" data-role="Führungskraft">
+                <td>
+                  <div class="user-cell">
+                    <div class="user-avatar" style="background:#0F6E56;">KB</div>
+                    <span class="user-name">Klaus Bauer</span>
+                  </div>
+                </td>
+                <td style="color:var(--c-text-muted);font-size:13px;">k.bauer@reply.de</td>
+                <td><span class="pill role-fuehrungskraft">Führungskraft</span></td>
+                <td style="font-size:13px;">BU Consulting</td>
+                <td style="font-size:13px;">Jannik Schröder</td>
+                <td><span class="pill pill-approved">Aktiv</span></td>
+                <td><button class="btn-edit" data-user="Klaus Bauer">Bearbeiten</button></td>
+              </tr>
+
+              <tr data-name="Marco Lehmann" data-role="Führungskraft">
+                <td>
+                  <div class="user-cell">
+                    <div class="user-avatar" style="background:#0F6E56;">ML</div>
+                    <span class="user-name">Marco Lehmann</span>
+                  </div>
+                </td>
+                <td style="color:var(--c-text-muted);font-size:13px;">m.lehmann@reply.de</td>
+                <td><span class="pill role-fuehrungskraft">Führungskraft</span></td>
+                <td style="font-size:13px;">BU Consulting</td>
+                <td style="font-size:13px;">Jannik Schröder</td>
+                <td><span class="pill pill-approved">Aktiv</span></td>
+                <td><button class="btn-edit" data-user="Marco Lehmann">Bearbeiten</button></td>
+              </tr>
+
+              <!-- Consultants — Anna Schmidt's Team -->
+              <tr data-name="Max Mustermann" data-role="Senior Consultant">
+                <td>
+                  <div class="user-cell">
+                    <div class="user-avatar" style="background:#1976D2;">MM</div>
+                    <span class="user-name">Max Mustermann</span>
+                  </div>
+                </td>
+                <td style="color:var(--c-text-muted);font-size:13px;">m.mustermann@reply.de</td>
+                <td><span class="pill role-senior">Senior Consultant</span></td>
+                <td style="font-size:13px;">Anna Schmidt's Team</td>
+                <td style="font-size:13px;">Anna Schmidt</td>
+                <td><span class="pill pill-approved">Aktiv</span></td>
+                <td><button class="btn-edit" data-user="Max Mustermann">Bearbeiten</button></td>
+              </tr>
+
+              <tr data-name="Sandra Koch" data-role="Consultant">
+                <td>
+                  <div class="user-cell">
+                    <div class="user-avatar" style="background:#388E3C;">SK</div>
+                    <span class="user-name">Sandra Koch</span>
+                  </div>
+                </td>
+                <td style="color:var(--c-text-muted);font-size:13px;">s.koch@reply.de</td>
+                <td><span class="pill role-consultant">Consultant</span></td>
+                <td style="font-size:13px;">Anna Schmidt's Team</td>
+                <td style="font-size:13px;">Anna Schmidt</td>
+                <td><span class="pill pill-approved">Aktiv</span></td>
+                <td><button class="btn-edit" data-user="Sandra Koch">Bearbeiten</button></td>
+              </tr>
+
+              <tr data-name="Felix Weber" data-role="Consultant">
+                <td>
+                  <div class="user-cell">
+                    <div class="user-avatar" style="background:#F57C00;">FW</div>
+                    <span class="user-name">Felix Weber</span>
+                  </div>
+                </td>
+                <td style="color:var(--c-text-muted);font-size:13px;">f.weber@reply.de</td>
+                <td><span class="pill role-consultant">Consultant</span></td>
+                <td style="font-size:13px;">Anna Schmidt's Team</td>
+                <td style="font-size:13px;">Anna Schmidt</td>
+                <td><span class="pill pill-approved">Aktiv</span></td>
+                <td><button class="btn-edit" data-user="Felix Weber">Bearbeiten</button></td>
+              </tr>
+
+              <tr data-name="David Klein" data-role="Backend Developer">
+                <td>
+                  <div class="user-cell">
+                    <div class="user-avatar" style="background:#5C6BC0;">DK</div>
+                    <span class="user-name">David Klein</span>
+                  </div>
+                </td>
+                <td style="color:var(--c-text-muted);font-size:13px;">d.klein@reply.de</td>
+                <td><span class="pill role-consultant">Backend Developer</span></td>
+                <td style="font-size:13px;">Anna Schmidt's Team</td>
+                <td style="font-size:13px;">Anna Schmidt</td>
+                <td><span class="pill pill-approved">Aktiv</span></td>
+                <td><button class="btn-edit" data-user="David Klein">Bearbeiten</button></td>
+              </tr>
+
+              <tr data-name="Anna Weber" data-role="Sr. Business Analyst">
+                <td>
+                  <div class="user-cell">
+                    <div class="user-avatar" style="background:#0097A7;">AW</div>
+                    <span class="user-name">Anna Weber</span>
+                  </div>
+                </td>
+                <td style="color:var(--c-text-muted);font-size:13px;">a.weber@reply.de</td>
+                <td><span class="pill role-senior">Sr. Business Analyst</span></td>
+                <td style="font-size:13px;">Anna Schmidt's Team</td>
+                <td style="font-size:13px;">Anna Schmidt</td>
+                <td><span class="pill pill-approved">Aktiv</span></td>
+                <td><button class="btn-edit" data-user="Anna Weber">Bearbeiten</button></td>
+              </tr>
+
+              <!-- Consultants — Klaus Bauer's Team -->
+              <tr data-name="Thomas Berger" data-role="Senior Consultant">
+                <td>
+                  <div class="user-cell">
+                    <div class="user-avatar" style="background:#7B1FA2;">TB</div>
+                    <span class="user-name">Thomas Berger</span>
+                  </div>
+                </td>
+                <td style="color:var(--c-text-muted);font-size:13px;">t.berger@reply.de</td>
+                <td><span class="pill role-senior">Senior Consultant</span></td>
+                <td style="font-size:13px;">Klaus Bauer's Team</td>
+                <td style="font-size:13px;">Klaus Bauer</td>
+                <td><span class="pill pill-approved">Aktiv</span></td>
+                <td><button class="btn-edit" data-user="Thomas Berger">Bearbeiten</button></td>
+              </tr>
+
+              <tr data-name="Jana Richter" data-role="Consultant">
+                <td>
+                  <div class="user-cell">
+                    <div class="user-avatar" style="background:#E53935;">JR</div>
+                    <span class="user-name">Jana Richter</span>
+                  </div>
+                </td>
+                <td style="color:var(--c-text-muted);font-size:13px;">j.richter@reply.de</td>
+                <td><span class="pill role-consultant">Consultant</span></td>
+                <td style="font-size:13px;">Klaus Bauer's Team</td>
+                <td style="font-size:13px;">Klaus Bauer</td>
+                <td><span class="pill pill-approved">Aktiv</span></td>
+                <td><button class="btn-edit" data-user="Jana Richter">Bearbeiten</button></td>
+              </tr>
+
+              <tr data-name="Michael Fischer" data-role="DevOps Engineer">
+                <td>
+                  <div class="user-cell">
+                    <div class="user-avatar" style="background:#37474F;">MF</div>
+                    <span class="user-name">Michael Fischer</span>
+                  </div>
+                </td>
+                <td style="color:var(--c-text-muted);font-size:13px;">m.fischer@reply.de</td>
+                <td><span class="pill role-consultant">DevOps Engineer</span></td>
+                <td style="font-size:13px;">Klaus Bauer's Team</td>
+                <td style="font-size:13px;">Klaus Bauer</td>
+                <td><span class="pill pill-approved">Aktiv</span></td>
+                <td><button class="btn-edit" data-user="Michael Fischer">Bearbeiten</button></td>
+              </tr>
+
+              <!-- Consultants — Marco Lehmann's Team -->
+              <tr data-name="Lisa Müller" data-role="Principal Consultant">
+                <td>
+                  <div class="user-cell">
+                    <div class="user-avatar" style="background:#0097A7;">LM</div>
+                    <span class="user-name">Lisa Müller</span>
+                  </div>
+                </td>
+                <td style="color:var(--c-text-muted);font-size:13px;">l.mueller@reply.de</td>
+                <td><span class="pill role-senior">Principal Consultant</span></td>
+                <td style="font-size:13px;">Marco Lehmann's Team</td>
+                <td style="font-size:13px;">Marco Lehmann</td>
+                <td><span class="pill pill-review">Elternzeit</span></td>
+                <td><button class="btn-edit" data-user="Lisa Müller">Bearbeiten</button></td>
+              </tr>
+
+              <tr data-name="Sophie Braun" data-role="Scrum Master">
+                <td>
+                  <div class="user-cell">
+                    <div class="user-avatar" style="background:#6D4C41;">SB</div>
+                    <span class="user-name">Sophie Braun</span>
+                  </div>
+                </td>
+                <td style="color:var(--c-text-muted);font-size:13px;">s.braun@reply.de</td>
+                <td><span class="pill role-consultant">Scrum Master</span></td>
+                <td style="font-size:13px;">Marco Lehmann's Team</td>
+                <td style="font-size:13px;">Marco Lehmann</td>
+                <td><span class="pill pill-approved">Aktiv</span></td>
+                <td><button class="btn-edit" data-user="Sophie Braun">Bearbeiten</button></td>
+              </tr>
+
+            </tbody>
+          </table>
+
+          <!-- Empty state (shown when filter matches nothing) -->
+          <div class="empty-state" id="empty-state">
+            <div class="empty-state-icon">👤</div>
+            <div class="empty-state-text">Keine Benutzer gefunden</div>
+          </div>
+        </div><!-- /.table-wrapper -->
+
+      </div><!-- /#tab-users -->
+
+      <!-- ── Tab 2: Rollen & Berechtigungen ──────────────────── -->
+      <div class="tab-panel" id="tab-roles">
+        <table class="perm-table">
+          <thead>
+            <tr>
+              <th>Berechtigung</th>
+              <th>Consultant</th>
+              <th>Führungskraft</th>
+              <th>BU-Leitung</th>
+              <th>Admin</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="perm-label">Eigene Opportunities ansehen</td>
+              <td><span class="perm-check">✓</span></td>
+              <td><span class="perm-check">✓</span></td>
+              <td><span class="perm-check">✓</span></td>
+              <td><span class="perm-check">✓</span></td>
+            </tr>
+            <tr>
+              <td class="perm-label">Opportunities erstellen</td>
+              <td><span class="perm-dash">—</span></td>
+              <td><span class="perm-check">✓</span></td>
+              <td><span class="perm-check">✓</span></td>
+              <td><span class="perm-check">✓</span></td>
+            </tr>
+            <tr>
+              <td class="perm-label">Matches ansehen (eigenes Team)</td>
+              <td><span class="perm-dash">—</span></td>
+              <td><span class="perm-check">✓</span></td>
+              <td><span class="perm-check">✓</span></td>
+              <td><span class="perm-check">✓</span></td>
+            </tr>
+            <tr>
+              <td class="perm-label">Matches genehmigen / ablehnen</td>
+              <td><span class="perm-dash">—</span></td>
+              <td><span class="perm-check">✓</span></td>
+              <td><span class="perm-check">✓</span></td>
+              <td><span class="perm-check">✓</span></td>
+            </tr>
+            <tr>
+              <td class="perm-label">Alle Matches ansehen (BU)</td>
+              <td><span class="perm-dash">—</span></td>
+              <td><span class="perm-dash">—</span></td>
+              <td><span class="perm-check">✓</span></td>
+              <td><span class="perm-check">✓</span></td>
+            </tr>
+            <tr>
+              <td class="perm-label">Verfügbarkeit eintragen</td>
+              <td><span class="perm-dash">—</span></td>
+              <td><span class="perm-check">✓</span></td>
+              <td><span class="perm-check">✓</span></td>
+              <td><span class="perm-check">✓</span></td>
+            </tr>
+            <tr>
+              <td class="perm-label">Alle Verfügbarkeiten verwalten</td>
+              <td><span class="perm-dash">—</span></td>
+              <td><span class="perm-dash">—</span></td>
+              <td><span class="perm-check">✓</span></td>
+              <td><span class="perm-check">✓</span></td>
+            </tr>
+            <tr>
+              <td class="perm-label">Exporte erstellen</td>
+              <td><span class="perm-dash">—</span></td>
+              <td><span class="perm-check">✓</span></td>
+              <td><span class="perm-check">✓</span></td>
+              <td><span class="perm-check">✓</span></td>
+            </tr>
+            <tr>
+              <td class="perm-label">Benutzerverwaltung</td>
+              <td><span class="perm-dash">—</span></td>
+              <td><span class="perm-dash">—</span></td>
+              <td><span class="perm-dash">—</span></td>
+              <td><span class="perm-check">✓</span></td>
+            </tr>
+            <tr>
+              <td class="perm-label">Rollenzuweisung</td>
+              <td><span class="perm-dash">—</span></td>
+              <td><span class="perm-dash">—</span></td>
+              <td><span class="perm-dash">—</span></td>
+              <td><span class="perm-check">✓</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div><!-- /#tab-roles -->
+
+    </div><!-- /.page-content -->
+  </main><!-- /.main-content -->
+</div><!-- /.app-shell -->
+
+<!-- ── Add / Edit User Modal ─────────────────────────────────── -->
+<div class="modal-overlay" id="user-modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="modal-title">Benutzer hinzufügen</h2>
+      <button class="modal-close" id="modal-close" aria-label="Schließen">×</button>
+    </div>
+    <div class="modal-body">
+      <form id="user-form" novalidate>
+
+        <div class="form-grid" style="margin-bottom:16px;">
+          <div class="form-field">
+            <label for="f-name">Name <span class="required">*</span></label>
+            <input id="f-name" class="input-outlined" type="text" placeholder="Vor- und Nachname" required />
+          </div>
+          <div class="form-field">
+            <label for="f-email">E-Mail <span class="required">*</span></label>
+            <input id="f-email" class="input-outlined" type="text" placeholder="vorname.name@reply.de" required />
+          </div>
+        </div>
+
+        <div class="form-grid" style="margin-bottom:16px;">
+          <div class="form-field">
+            <label for="f-role">Rolle <span class="required">*</span></label>
+            <select id="f-role" class="input-outlined" required>
+              <option value="">Bitte wählen …</option>
+              <option>BU-Leitung</option>
+              <option>Führungskraft</option>
+              <option>Senior Consultant</option>
+              <option>Consultant</option>
+              <option>Backend Developer</option>
+              <option>DevOps Engineer</option>
+              <option>Scrum Master</option>
+              <option>Business Analyst</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="f-team">Team / BU</label>
+            <input id="f-team" class="input-outlined" type="text" placeholder="z.B. BU Consulting" />
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="f-manager">Manager</label>
+            <select id="f-manager" class="input-outlined">
+              <option value="">Kein Manager</option>
+              <option>Jannik Schröder</option>
+              <option>Anna Schmidt</option>
+              <option>Klaus Bauer</option>
+              <option>Marco Lehmann</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="f-status">Status</label>
+            <select id="f-status" class="input-outlined">
+              <option>Aktiv</option>
+              <option>Inaktiv</option>
+              <option>Elternzeit</option>
+            </select>
+          </div>
+        </div>
+
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outlined" id="modal-cancel">Abbrechen</button>
+      <button class="btn btn-primary" id="modal-save">Speichern</button>
+    </div>
+  </div>
+</div>
+
+<script src="features.js"></script>
+<script src="sidebar.js"></script>
+<script src="script.js"></script>
+<script>
+(function () {
+  /* ── Filter / search ─────────────────────────────────────── */
+  const searchInput = document.getElementById('search-input');
+  const roleFilter  = document.getElementById('role-filter');
+  const tbody       = document.getElementById('users-tbody');
+  const emptyState  = document.getElementById('empty-state');
+
+  function applyFilter() {
+    const query    = searchInput.value.trim().toLowerCase();
+    const roleVal  = roleFilter.value.toLowerCase();
+    const rows     = Array.from(tbody.querySelectorAll('tr'));
+    let visibleCount = 0;
+
+    rows.forEach(row => {
+      const name = (row.dataset.name || '').toLowerCase();
+      const role = (row.dataset.role || '').toLowerCase();
+      const matchesSearch = !query || name.includes(query) || role.includes(query);
+      const matchesRole   = !roleVal || role === roleVal;
+
+      if (matchesSearch && matchesRole) {
+        row.style.display = '';
+        visibleCount++;
+      } else {
+        row.style.display = 'none';
+      }
+    });
+
+    if (visibleCount === 0) {
+      emptyState.classList.add('visible');
+    } else {
+      emptyState.classList.remove('visible');
+    }
+  }
+
+  searchInput.addEventListener('input', applyFilter);
+  roleFilter.addEventListener('change', applyFilter);
+
+  /* ── Modal helpers ───────────────────────────────────────── */
+  const overlay    = document.getElementById('user-modal-overlay');
+  const modalTitle = document.getElementById('modal-title');
+  const nameField  = document.getElementById('f-name');
+  const emailField = document.getElementById('f-email');
+  const roleField  = document.getElementById('f-role');
+  const teamField  = document.getElementById('f-team');
+  const managerField = document.getElementById('f-manager');
+  const statusField  = document.getElementById('f-status');
+
+  function openModal(userName) {
+    // Reset form
+    nameField.value    = '';
+    emailField.value   = '';
+    roleField.value    = '';
+    teamField.value    = '';
+    managerField.value = '';
+    statusField.value  = 'Aktiv';
+
+    if (userName) {
+      // Pre-fill from row data
+      modalTitle.textContent = 'Benutzer bearbeiten';
+      const row = Array.from(tbody.querySelectorAll('tr'))
+        .find(r => r.dataset.name === userName);
+      if (row) {
+        nameField.value    = row.dataset.name || '';
+        const emailEl      = row.querySelectorAll('td')[1];
+        emailField.value   = emailEl ? emailEl.textContent.trim() : '';
+        roleField.value    = row.dataset.role || '';
+        const teamEl       = row.querySelectorAll('td')[3];
+        teamField.value    = teamEl ? teamEl.textContent.trim() : '';
+        const managerEl    = row.querySelectorAll('td')[4];
+        const managerText  = managerEl ? managerEl.textContent.trim() : '';
+        managerField.value = managerText === '—' ? '' : managerText;
+        const statusEl     = row.querySelector('.pill');
+        if (statusEl) {
+          const statusText = statusEl.textContent.trim();
+          statusField.value = statusText === 'Aktiv' ? 'Aktiv'
+                            : statusText === 'Elternzeit' ? 'Elternzeit'
+                            : 'Inaktiv';
+        }
+      }
+    } else {
+      modalTitle.textContent = 'Benutzer hinzufügen';
+    }
+
+    overlay.classList.add('open');
+    nameField.focus();
+  }
+
+  function closeModal() {
+    overlay.classList.remove('open');
+  }
+
+  /* ── Open: Add button ────────────────────────────────────── */
+  document.getElementById('add-user-btn').addEventListener('click', () => openModal(null));
+
+  /* ── Open: Edit buttons ──────────────────────────────────── */
+  document.getElementById('users-tbody').addEventListener('click', (e) => {
+    const btn = e.target.closest('.btn-edit');
+    if (!btn) return;
+    openModal(btn.dataset.user);
+  });
+
+  /* ── Close modal ─────────────────────────────────────────── */
+  document.getElementById('modal-close').addEventListener('click', closeModal);
+  document.getElementById('modal-cancel').addEventListener('click', closeModal);
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) closeModal();
+  });
+
+  /* ── Save ────────────────────────────────────────────────── */
+  document.getElementById('modal-save').addEventListener('click', () => {
+    // Basic required-field check
+    if (!nameField.value.trim() || !emailField.value.trim() || !roleField.value) {
+      [nameField, emailField, roleField].forEach(f => {
+        if (!f.value.trim()) f.classList.add('error');
+      });
+      return;
+    }
+    [nameField, emailField, roleField].forEach(f => f.classList.remove('error'));
+    closeModal();
+    showSnackbar('Benutzer wurde gespeichert.');
+  });
+
+  // Remove error styling on input
+  [nameField, emailField, roleField].forEach(f => {
+    f.addEventListener('input', () => f.classList.remove('error'));
+  });
+
+  /* ── Keyboard: Escape closes modal ──────────────────────── */
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && overlay.classList.contains('open')) closeModal();
+  });
+})();
+</script>
+  <script src="feature-toggle.js"></script>
+</body>
+</html>

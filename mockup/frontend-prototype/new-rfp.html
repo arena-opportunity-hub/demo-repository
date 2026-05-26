@@ -1,0 +1,179 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Neuer RfP — Opportunity Hub</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="app-shell">
+
+  <aside class="sidebar"></aside>
+
+  <main class="main-content">
+
+    <header class="page-header">
+      <div>
+        <a href="new-opportunity.html" class="breadcrumb">← Typ-Auswahl</a>
+        <div class="step-indicator" style="margin-top:6px">Schritt 2 von 3</div>
+        <h1>Neuer RfP / Ausschreibung</h1>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="display:inline-block;padding:3px 10px;border-radius:12px;background:#F3E5F5;color:#7B1FA2;font-size:12px;font-weight:600">RfP</span>
+        <a href="my-opportunities.html" class="btn btn-text">Abbrechen</a>
+      </div>
+    </header>
+
+    <div class="page-content">
+      <form id="rfp-form" class="form-wrapper" novalidate>
+
+        <!-- ── 1. Eckdaten ─────────────────────────────────────── -->
+        <section class="form-section">
+          <h2 class="form-section-title">Eckdaten</h2>
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="rfp-title">Titel / Ausschreibungsname <span class="required">*</span></label>
+              <input type="text" id="rfp-title" class="input-outlined" placeholder="z. B. Digital Insurance Platform" required autocomplete="off" />
+              <span class="field-error" id="rfp-title-error"></span>
+            </div>
+            <div class="form-field">
+              <label for="rfp-client">Ausschreibender / Kunde <span class="required">*</span></label>
+              <input type="text" id="rfp-client" class="input-outlined" placeholder="z. B. IPSWAYS / Insurance" required autocomplete="off" />
+            </div>
+            <div class="form-field">
+              <label for="rfp-deadline">Abgabefrist <span class="required">*</span></label>
+              <input type="date" id="rfp-deadline" class="input-outlined" required />
+              <span class="field-error" id="rfp-deadline-error"></span>
+            </div>
+            <div class="form-field">
+              <label for="rfp-volume">Geschätztes Volumen</label>
+              <input type="text" id="rfp-volume" class="input-outlined" placeholder="z. B. 2,5 Mio. EUR / 5.000 Stunden" autocomplete="off" />
+            </div>
+          </div>
+        </section>
+
+        <!-- ── 2. Beschreibung ─────────────────────────────────── -->
+        <section class="form-section">
+          <h2 class="form-section-title">Beschreibung</h2>
+          <div class="form-field">
+            <label for="rfp-desc">Hintergrund &amp; Ziel <span class="required">*</span></label>
+            <textarea id="rfp-desc" class="input-outlined" rows="4"
+              placeholder="Kurze Zusammenfassung der Ausschreibung, Kontext und strategische Bedeutung…" required></textarea>
+            <span class="field-error" id="rfp-desc-error"></span>
+          </div>
+          <div class="form-field">
+            <label for="rfp-scope">Scope / Leistungsumfang</label>
+            <textarea id="rfp-scope" class="input-outlined" rows="3"
+              placeholder="Welche Leistungen werden ausgeschrieben?"></textarea>
+          </div>
+        </section>
+
+        <!-- ── 3. Benötigte Rollen ─────────────────────────────── -->
+        <section class="form-section">
+          <h2 class="form-section-title">Benötigte Rollen</h2>
+          <p style="font-size:13px;color:var(--c-text-muted);margin-bottom:12px">
+            Definiere die Rollen, die für diesen RfP besetzt werden müssen. Für jede Rolle werden später passende Kandidaten vorgeschlagen.
+          </p>
+          <div id="role-rows" style="display:flex;flex-direction:column;gap:10px"></div>
+          <button type="button" class="btn btn-outlined btn-sm" id="add-role-btn" style="margin-top:10px">+ Rolle hinzufügen</button>
+          <div style="margin-top:12px">
+            <span class="suggestion-label">Vorschläge:</span>
+            <button type="button" class="chip-suggest-role" data-role="Solution Architect">Solution Architect</button>
+            <button type="button" class="chip-suggest-role" data-role="Business Analyst">Business Analyst</button>
+            <button type="button" class="chip-suggest-role" data-role="Project Manager">Project Manager</button>
+            <button type="button" class="chip-suggest-role" data-role="DevOps Engineer">DevOps Engineer</button>
+            <button type="button" class="chip-suggest-role" data-role="Scrum Master">Scrum Master</button>
+          </div>
+        </section>
+
+        <!-- ── 4. Links & Anhänge ─────────────────────────────── -->
+        <section class="form-section">
+          <h2 class="form-section-title">Links &amp; Anhänge</h2>
+          <div id="rfp-link-rows" style="display:flex;flex-direction:column;gap:8px"></div>
+          <button type="button" class="btn btn-outlined btn-sm" id="add-rfp-link-btn" style="margin-top:8px">+ Link / Dokument hinzufügen</button>
+          <div style="font-size:12px;color:var(--c-text-muted);margin-top:6px">Ausschreibungsdokument, E-Mail, SharePoint-Link, Tender-PDF etc.</div>
+        </section>
+
+        <!-- ── Actions ─────────────────────────────────────────── -->
+        <div class="form-actions">
+          <a href="my-opportunities.html" class="btn btn-text">Abbrechen</a>
+          <div style="display:flex;gap:8px">
+            <button type="button" class="btn btn-text" onclick="location.href='my-opportunities.html'">
+              Entwurf speichern
+            </button>
+            <button type="submit" id="rfp-submit-btn" class="btn btn-primary" disabled>
+              RfP anlegen &amp; Prozess starten
+            </button>
+          </div>
+        </div>
+
+      </form>
+    </div>
+
+  </main>
+</div>
+
+<script src="features.js"></script>
+<script src="sidebar.js"></script>
+<script src="script.js"></script>
+<script>
+(function () {
+  var roleIdx = 0;
+  var roleRowsEl = document.getElementById('role-rows');
+
+  function createRoleRow(name) {
+    var idx = roleIdx++;
+    var div = document.createElement('div');
+    div.style.cssText = 'display:flex;gap:8px;align-items:center;background:var(--c-bg);border:1px solid var(--c-border);border-radius:4px;padding:10px 12px';
+    div.innerHTML =
+      '<div style="width:28px;height:28px;border-radius:50%;background:#F3E5F5;color:#7B1FA2;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">' + (idx + 1) + '</div>' +
+      '<input type="text" class="input-outlined" placeholder="z. B. Solution Architect" value="' + (name || '') + '" style="flex:1" />' +
+      '<select class="input-outlined" style="width:120px"><option value="1">1 Person</option><option value="2">2 Personen</option><option value="3">3 Personen</option></select>' +
+      '<input type="text" class="input-outlined" placeholder="Skills (kommagetrennt)" style="flex:1" />' +
+      '<button type="button" class="skill-row-remove" title="Entfernen">✕</button>';
+    div.querySelector('.skill-row-remove').addEventListener('click', () => div.remove());
+    return div;
+  }
+
+  document.getElementById('add-role-btn').addEventListener('click', () => roleRowsEl.appendChild(createRoleRow('')));
+  document.querySelectorAll('.chip-suggest-role').forEach(btn => {
+    btn.addEventListener('click', () => roleRowsEl.appendChild(createRoleRow(btn.dataset.role)));
+  });
+
+  // Pre-fill with 2 default roles
+  roleRowsEl.appendChild(createRoleRow('Solution Architect'));
+  roleRowsEl.appendChild(createRoleRow('Business Analyst'));
+
+  // Link rows
+  var linkRowsEl = document.getElementById('rfp-link-rows');
+  function createLinkRow() {
+    var div = document.createElement('div');
+    div.style.cssText = 'display:flex;gap:8px;align-items:center';
+    div.innerHTML =
+      '<input type="text" class="input-outlined" placeholder="https:// oder Dateiname" style="flex:1" />' +
+      '<input type="text" class="input-outlined" placeholder="Beschreibung (optional)" style="width:220px" />' +
+      '<button type="button" class="skill-row-remove" title="Entfernen">✕</button>';
+    div.querySelector('.skill-row-remove').addEventListener('click', () => div.remove());
+    return div;
+  }
+  document.getElementById('add-rfp-link-btn').addEventListener('click', () => linkRowsEl.appendChild(createLinkRow()));
+
+  // Enable submit when required fields have values
+  var required = [document.getElementById('rfp-title'), document.getElementById('rfp-client'), document.getElementById('rfp-deadline'), document.getElementById('rfp-desc')];
+  var submitBtn = document.getElementById('rfp-submit-btn');
+  function checkValid() {
+    submitBtn.disabled = required.some(function(f){ return !f.value.trim(); });
+  }
+  required.forEach(function(f){ f.addEventListener('input', checkValid); });
+
+  document.getElementById('rfp-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    showSnackbar('RfP angelegt — Prozess gestartet.');
+    setTimeout(function(){ location.href = 'rfp-detail.html'; }, 1200);
+  });
+})();
+</script>
+  <script src="feature-toggle.js"></script>
+</body>
+</html>

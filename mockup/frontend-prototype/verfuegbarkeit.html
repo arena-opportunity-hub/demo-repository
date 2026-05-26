@@ -1,0 +1,921 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Verfügbarkeit — Opportunity Hub</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- ── Sidebar ──────────────────────────────────────────────── -->
+  <aside class="sidebar"></aside>
+
+  <!-- ── Main ─────────────────────────────────────────────────── -->
+  <main class="main-content">
+
+    <header class="page-header">
+      <div>
+        <h1>Verfügbarkeit</h1>
+        <div style="font-size:13px;color:var(--c-text-muted);margin-top:2px">
+          Planung &amp; Auslastung — Jahresansicht 2026
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="btn btn-outlined" id="export-excel-btn">⬇ Als Excel exportieren</button>
+        <button class="btn btn-primary" id="add-entry-btn">+ Eintrag hinzufügen</button>
+      </div>
+    </header>
+
+    <div class="page-content">
+
+      <!-- Filter Bar -->
+      <div class="filter-bar" style="margin-bottom:16px">
+        <div class="filter-group">
+          <label for="f-emp">Mitarbeiter</label>
+          <select id="f-emp" class="input-outlined"></select>
+        </div>
+        <div class="filter-group">
+          <label for="f-mgr">Business Unit</label>
+          <select id="f-mgr" class="input-outlined">
+            <option value="">Alle</option>
+            <option value="Anna Schmidt">TCD Süd (Anna Schmidt)</option>
+            <option value="Klaus Bauer">TCD Nord (Klaus Bauer)</option>
+            <option value="Marco Lehmann">TCD West (Marco Lehmann)</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="f-typ">Typ</label>
+          <select id="f-typ" class="input-outlined"></select>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs" style="margin-bottom:20px">
+        <button class="tab-btn active" data-tab="uebersicht">Übersicht</button>
+        <button class="tab-btn" data-tab="liste">Liste</button>
+        <button class="tab-btn" data-tab="kalender">Jahresansicht</button>
+      </div>
+
+      <!-- ── Tab: Liste ──────────────────────────────────────── -->
+      <div class="tab-panel" id="tab-liste">
+        <div id="list-view-container"></div>
+      </div>
+
+      <!-- ── Tab: Kalender ──────────────────────────────────── -->
+      <div class="tab-panel" id="tab-kalender">
+        <label class="holiday-toggle-label">
+          <input type="checkbox" id="show-holiday" />
+          Urlaub anzeigen
+        </label>
+        <div class="calendar-legend" id="calendar-legend"></div>
+        <div class="calendar-scroll-wrapper">
+          <table class="calendar-table" id="calendar-table"></table>
+        </div>
+      </div>
+
+      <!-- ── Tab: Übersicht ─────────────────────────────────── -->
+      <div class="tab-panel active" id="tab-uebersicht">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px">
+          <div style="font-size:13px;color:var(--c-text-muted)">
+            Alle Mitarbeitenden — <span id="overview-count">12</span> Personen aus 3 Business Units
+          </div>
+          <button class="btn btn-outlined" id="my-team-btn">&#128101; Mein Team (TCD Süd)</button>
+        </div>
+        <div id="overview-container"></div>
+      </div>
+
+    </div><!-- /page-content -->
+  </main>
+
+</div><!-- /app-shell -->
+
+<!-- ── Add / Edit Entry Modal ───────────────────────────────── -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="modal-title">Verfügbarkeit eintragen</h2>
+      <button class="modal-close" id="modal-close">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid" style="grid-template-columns:1fr 1fr;gap:16px">
+
+        <div class="form-field" style="grid-column:1/-1">
+          <label for="m-employee">Mitarbeiter / Mitarbeiterin</label>
+          <select id="m-employee" class="input-outlined">
+            <option value="">— Auswählen —</option>
+          </select>
+        </div>
+
+        <div class="form-field" style="grid-column:1/-1">
+          <label for="m-type">Typ</label>
+          <select id="m-type" class="input-outlined">
+            <option value="">— Auswählen —</option>
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label for="m-from">Von</label>
+          <input type="date" id="m-from" class="input-outlined" />
+        </div>
+
+        <div class="form-field">
+          <label for="m-to">Bis</label>
+          <input type="date" id="m-to" class="input-outlined" />
+        </div>
+
+        <div class="form-field" style="grid-column:1/-1">
+          <label for="m-project">Projekt / Notiz (optional)</label>
+          <input type="text" id="m-project" class="input-outlined"
+            placeholder="z. B. Backend-Projekt Datenmigration" />
+        </div>
+
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-text" id="modal-cancel">Abbrechen</button>
+      <button class="btn btn-primary" id="modal-save">Speichern</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Person Drawer ─────────────────────────────────────────── -->
+<div class="drawer-overlay" id="person-overlay"></div>
+<div class="drawer" id="person-drawer" style="width:560px;max-width:100vw">
+  <div class="drawer-header" style="padding:16px 20px">
+    <div class="drawer-avatar" id="pd-avatar" style="width:44px;height:44px;font-size:15px;border-radius:50%;background:#1976D2;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0"></div>
+    <div style="flex:1;min-width:0;margin-left:12px">
+      <div style="font-weight:700;font-size:16px" id="pd-name"></div>
+      <div style="font-size:13px;color:var(--c-text-muted)" id="pd-role"></div>
+      <div style="font-size:12px;color:var(--c-text-muted);margin-top:2px" id="pd-bu"></div>
+    </div>
+    <button class="drawer-close" id="pd-close">×</button>
+  </div>
+
+  <div class="drawer-body" style="padding:0;overflow-y:auto">
+
+    <!-- Status section -->
+    <div class="drawer-section">
+      <div class="drawer-section-title">Aktueller Status</div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:8px">
+        <div style="flex:1;min-width:120px">
+          <div style="font-size:11px;color:var(--c-text-muted);margin-bottom:4px">Aktuell</div>
+          <div id="pd-status"></div>
+        </div>
+        <div style="flex:1;min-width:120px">
+          <div style="font-size:11px;color:var(--c-text-muted);margin-bottom:4px">Verfügbar ab</div>
+          <div style="font-weight:500;font-size:14px" id="pd-avail"></div>
+        </div>
+        <div style="flex:1;min-width:120px">
+          <div style="font-size:11px;color:var(--c-text-muted);margin-bottom:4px">Tagessatz</div>
+          <div style="font-weight:500;font-size:14px;color:#1976D2" id="pd-rate"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit section -->
+    <div class="drawer-section">
+      <div class="drawer-section-title">Details bearbeiten</div>
+      <div style="display:flex;flex-direction:column;gap:14px;margin-top:12px">
+
+        <div class="form-grid">
+          <div class="form-field">
+            <label>Tagessatz (min.) €</label>
+            <input type="number" id="pd-edit-rate" class="input-outlined" min="0" step="50" />
+          </div>
+          <div class="form-field">
+            <label>Region</label>
+            <input type="text" id="pd-edit-region" class="input-outlined" placeholder="z. B. München" />
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-field">
+            <label>Mobilität</label>
+            <select id="pd-edit-mobility" class="input-outlined">
+              <option>Remote</option>
+              <option>Hybrid</option>
+              <option>Onsite</option>
+              <option>Deutschlandweit</option>
+            </select>
+          </div>
+          <div class="form-field" style="display:flex;align-items:center;gap:10px;padding-top:22px">
+            <input type="checkbox" id="pd-edit-parttime" style="width:16px;height:16px;cursor:pointer" />
+            <label for="pd-edit-parttime" style="cursor:pointer;font-weight:400">Teilzeit möglich</label>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label>Verfügbar ab</label>
+          <input type="text" id="pd-edit-avail" class="input-outlined" placeholder="z. B. 01.10.2026 oder Sofort" />
+        </div>
+
+        <div class="form-field">
+          <label>Notizen</label>
+          <textarea id="pd-edit-notes" class="input-outlined" rows="3" placeholder="Interne Hinweise zur Person oder Verfügbarkeit…"></textarea>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Entries summary -->
+    <div class="drawer-section">
+      <div class="drawer-section-title">Aktuelle Einträge (Jahresplan)</div>
+      <div id="pd-entries" style="margin-top:8px;display:flex;flex-direction:column;gap:6px"></div>
+      <button class="btn btn-outlined btn-sm" style="margin-top:10px" onclick="showSnackbar('Neuer Eintrag-Dialog öffnet sich.')">+ Eintrag hinzufügen</button>
+    </div>
+
+    <!-- Opportunity Historie -->
+    <div class="drawer-section">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+        <div class="drawer-section-title" style="margin-bottom:0">Opportunity Historie</div>
+        <div id="pd-hist-summary" style="font-size:12px;color:var(--c-text-muted)"></div>
+      </div>
+      <div id="pd-opp-history" style="display:flex;flex-direction:column;gap:8px">
+        <span style="color:var(--c-text-muted);font-size:13px">Keine Einträge vorhanden.</span>
+      </div>
+    </div>
+
+  </div><!-- /drawer-body -->
+
+  <div class="drawer-actions">
+    <button class="btn btn-primary" id="pd-save-btn">Änderungen speichern</button>
+    <button class="btn btn-text" id="pd-cancel-btn">Abbrechen</button>
+  </div>
+</div>
+
+<script src="features.js"></script>
+<script src="sidebar.js"></script>
+<script src="script.js"></script>
+<script>
+/* ── Data ─────────────────────────────────────────────────────── */
+const AVAIL_TYPES = [
+  { key: 'billable',     label: 'Billable',                       color: '#4CAF50' },
+  { key: 'reserved',     label: 'Reserved for upcoming Projects',  color: '#29B6F6' },
+  { key: 'prolongation', label: 'Prolongation possible',           color: '#AB47BC' },
+  { key: 'bench',        label: 'BENCH',                           color: '#FF7043' },
+  { key: 'sickness',     label: 'Sickness',                        color: '#EF5350' },
+  { key: 'holiday',      label: 'Holiday',                         color: '#FFA726' },
+  { key: 'parental',     label: 'Parental leave',                  color: '#EC407A' },
+  { key: 'absence',      label: 'Other Absence',                   color: '#BDBDBD' },
+  { key: 'junior',       label: 'Junior / free of charge',         color: '#9CCC65' },
+  { key: 'parttime',     label: 'Parttime availability',           color: '#26C6DA' },
+  { key: 'left',         label: 'Not part of company',             color: '#455A64' },
+];
+
+const EMPLOYEES = [
+  /* TCD Süd */
+  { key:'mm',  name:'Max Mustermann',  role:'Senior Consultant',    manager:'Anna Schmidt',  bu:'TCD Süd',  buId:'TCD-SÜD',  teamId:'TEAM-AS', dayRate:1100, region:'München',    mobility:'Hybrid',  partTime:false },
+  { key:'sk',  name:'Sandra Koch',     role:'Consultant',           manager:'Anna Schmidt',  bu:'TCD Süd',  buId:'TCD-SÜD',  teamId:'TEAM-AS', dayRate:850,  region:'München',    mobility:'Onsite',  partTime:false },
+  { key:'fw',  name:'Felix Weber',     role:'Consultant',           manager:'Anna Schmidt',  bu:'TCD Süd',  buId:'TCD-SÜD',  teamId:'TEAM-AS', dayRate:750,  region:'München',    mobility:'Remote',  partTime:false },
+  { key:'pk',  name:'Petra Krause',    role:'Senior Consultant',    manager:'Anna Schmidt',  bu:'TCD Süd',  buId:'TCD-SÜD',  teamId:'TEAM-AS', dayRate:1050, region:'München',    mobility:'Hybrid',  partTime:false },
+  { key:'ls',  name:'Leon Schwarz',    role:'Backend Developer',    manager:'Anna Schmidt',  bu:'TCD Süd',  buId:'TCD-SÜD',  teamId:'TEAM-AS', dayRate:820,  region:'Stuttgart',  mobility:'Remote',  partTime:false },
+  /* TCD Nord */
+  { key:'tb',  name:'Thomas Berger',   role:'Senior Consultant',    manager:'Klaus Bauer',   bu:'TCD Nord', buId:'TCD-NORD', teamId:'TEAM-KB', dayRate:1050, region:'Hamburg',    mobility:'Remote',  partTime:false },
+  { key:'jr',  name:'Jana Richter',    role:'Consultant',           manager:'Klaus Bauer',   bu:'TCD Nord', buId:'TCD-NORD', teamId:'TEAM-KB', dayRate:800,  region:'Frankfurt',  mobility:'Hybrid',  partTime:false },
+  { key:'mw',  name:'Markus Weiß',     role:'DevOps Engineer',      manager:'Klaus Bauer',   bu:'TCD Nord', buId:'TCD-NORD', teamId:'TEAM-KB', dayRate:970,  region:'Hamburg',    mobility:'Remote',  partTime:false },
+  { key:'sb2', name:'Sina Braun',      role:'Business Analyst',     manager:'Klaus Bauer',   bu:'TCD Nord', buId:'TCD-NORD', teamId:'TEAM-KB', dayRate:850,  region:'Bremen',     mobility:'Hybrid',  partTime:false },
+  /* TCD West */
+  { key:'lm',  name:'Lisa Müller',     role:'Principal Consultant', manager:'Marco Lehmann', bu:'TCD West', buId:'TCD-WEST', teamId:'TEAM-ML', dayRate:1400, region:'Düsseldorf', mobility:'Remote',  partTime:true  },
+  { key:'pn',  name:'Paul Neumann',    role:'Principal Consultant', manager:'Marco Lehmann', bu:'TCD West', buId:'TCD-WEST', teamId:'TEAM-ML', dayRate:1380, region:'Düsseldorf', mobility:'Remote',  partTime:false },
+  { key:'gv',  name:'Greta Vogel',     role:'Scrum Master',         manager:'Marco Lehmann', bu:'TCD West', buId:'TCD-WEST', teamId:'TEAM-ML', dayRate:860,  region:'Frankfurt',  mobility:'Hybrid',  partTime:false },
+];
+
+const AVAIL_FROM = {
+  mm:'01.11.2026', sk:'01.10.2026', fw:'01.01.2027', pk:'01.10.2026', ls:'Sofort',
+  tb:'01.09.2026', jr:'01.07.2026', mw:'01.01.2027', sb2:'Sofort',
+  lm:'01.07.2026', pn:'01.11.2026', gv:'01.09.2026',
+};
+
+let ENTRIES = [
+  { empKey:'mm',  typeKey:'billable',     from:new Date('2026-01-01'), to:new Date('2026-07-31'), project:'Backend-Projekt Datenmigration' },
+  { empKey:'mm',  typeKey:'reserved',     from:new Date('2026-08-01'), to:new Date('2026-10-31'), project:'Cloud Architect AWS (Pipeline)' },
+  { empKey:'mm',  typeKey:'holiday',      from:new Date('2026-07-14'), to:new Date('2026-07-25'), project:'' },
+  { empKey:'sk',  typeKey:'bench',        from:new Date('2026-01-01'), to:new Date('2026-02-28'), project:'' },
+  { empKey:'sk',  typeKey:'billable',     from:new Date('2026-03-01'), to:new Date('2026-09-30'), project:'Backend-Projekt Datenmigration' },
+  { empKey:'sk',  typeKey:'sickness',     from:new Date('2026-04-06'), to:new Date('2026-04-11'), project:'' },
+  { empKey:'fw',  typeKey:'bench',        from:new Date('2026-01-01'), to:new Date('2026-04-30'), project:'' },
+  { empKey:'fw',  typeKey:'junior',       from:new Date('2026-05-01'), to:new Date('2026-08-31'), project:'Interne Initiative' },
+  { empKey:'fw',  typeKey:'reserved',     from:new Date('2026-09-01'), to:new Date('2026-12-31'), project:'Prozessoptimierung Produktion' },
+  { empKey:'pk',  typeKey:'billable',     from:new Date('2026-01-01'), to:new Date('2026-09-30'), project:'Retail Banking Project' },
+  { empKey:'ls',  typeKey:'bench',        from:new Date('2026-01-01'), to:new Date('2026-12-31'), project:'' },
+  { empKey:'tb',  typeKey:'billable',     from:new Date('2026-01-01'), to:new Date('2026-05-31'), project:'BI-Beratung IVF Verbesserung' },
+  { empKey:'tb',  typeKey:'prolongation', from:new Date('2026-06-01'), to:new Date('2026-08-31'), project:'BI-Beratung IVF Verbesserung' },
+  { empKey:'tb',  typeKey:'bench',        from:new Date('2026-09-01'), to:new Date('2026-12-31'), project:'' },
+  { empKey:'jr',  typeKey:'billable',     from:new Date('2026-02-01'), to:new Date('2026-06-30'), project:'Stratify GmbH Prozessopt.' },
+  { empKey:'jr',  typeKey:'bench',        from:new Date('2026-07-01'), to:new Date('2026-12-31'), project:'' },
+  { empKey:'jr',  typeKey:'holiday',      from:new Date('2026-08-03'), to:new Date('2026-08-21'), project:'' },
+  { empKey:'mw',  typeKey:'billable',     from:new Date('2026-01-01'), to:new Date('2026-12-31'), project:'Container Migration' },
+  { empKey:'sb2', typeKey:'billable',     from:new Date('2026-01-01'), to:new Date('2026-03-31'), project:'Prozessoptimierung' },
+  { empKey:'sb2', typeKey:'bench',        from:new Date('2026-04-01'), to:new Date('2026-12-31'), project:'' },
+  { empKey:'lm',  typeKey:'parental',     from:new Date('2026-01-01'), to:new Date('2026-06-30'), project:'' },
+  { empKey:'lm',  typeKey:'parttime',     from:new Date('2026-07-01'), to:new Date('2026-12-31'), project:'Rückkehr Teilzeit' },
+  { empKey:'pn',  typeKey:'billable',     from:new Date('2026-01-01'), to:new Date('2026-10-31'), project:'Insurance Analytics' },
+  { empKey:'gv',  typeKey:'billable',     from:new Date('2026-01-01'), to:new Date('2026-08-31'), project:'Agile Transformation' },
+];
+
+/* ── UI State ─────────────────────────────────────────────────── */
+let filterEmp     = '';
+let filterManager = '';
+let filterTyp     = '';
+let showHoliday   = false;
+let editingIdx    = -1;
+let myTeamActive  = false;
+
+/* ── Week helpers ─────────────────────────────────────────────── */
+function getISOWeek1Monday(year) {
+  const jan4 = new Date(year, 0, 4);
+  const dow  = jan4.getDay() || 7;
+  const mon  = new Date(jan4);
+  mon.setDate(jan4.getDate() - (dow - 1));
+  return mon;
+}
+
+function generateWeeks(year) {
+  const weeks = [];
+  let d = getISOWeek1Monday(year);
+  for (let i = 0; i < 52; i++) {
+    weeks.push(new Date(d));
+    d = new Date(d.getTime() + 7 * 86400000);
+  }
+  return weeks;
+}
+
+function isoWeekNumber(weekStart) {
+  const thu     = new Date(weekStart.getTime() + 3 * 86400000);
+  const yearStart = new Date(thu.getFullYear(), 0, 4);
+  const ys_dow    = yearStart.getDay() || 7;
+  const ys_mon    = new Date(yearStart.getTime() - (ys_dow - 1) * 86400000);
+  return Math.round((thu - ys_mon) / (7 * 86400000)) + 1;
+}
+
+const WEEKS = generateWeeks(2026);
+
+function getTypeForWeek(empKey, weekStart) {
+  const weekEnd = new Date(weekStart.getTime() + 6 * 86400000);
+  let result = null;
+  for (const e of ENTRIES) {
+    if (e.empKey !== empKey) continue;
+    if (!showHoliday && e.typeKey === 'holiday') continue;
+    if (e.from <= weekEnd && e.to >= weekStart) result = e;
+  }
+  if (!result) return null;
+  return { type: AVAIL_TYPES.find(t => t.key === result.typeKey), project: result.project };
+}
+
+function filteredEmployees() {
+  return EMPLOYEES.filter(emp => {
+    if (filterEmp     && emp.key     !== filterEmp)     return false;
+    if (filterManager && emp.manager !== filterManager) return false;
+    return true;
+  });
+}
+
+/* ── Render Legend ────────────────────────────────────────────── */
+function renderLegend() {
+  const el = document.getElementById('calendar-legend');
+  if (!el) return;
+  el.innerHTML = AVAIL_TYPES
+    .filter(t => showHoliday || t.key !== 'holiday')
+    .map(t =>
+      `<div class="legend-item">
+         <div class="legend-dot" style="background:${t.color}"></div>
+         <span>${t.label}</span>
+       </div>`
+    ).join('');
+}
+
+/* ── Render Calendar ──────────────────────────────────────────── */
+function renderCalendar() {
+  const table = document.getElementById('calendar-table');
+  if (!table) return;
+
+  const MONTH_NAMES = ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
+  const weekNums    = WEEKS.map(w => isoWeekNumber(w));
+
+  const monthSpans = [];
+  let curMonth = -1, curCount = 0;
+  WEEKS.forEach(w => {
+    const m = w.getMonth();
+    if (m !== curMonth) {
+      if (curCount > 0) monthSpans.push({ month: curMonth, count: curCount });
+      curMonth = m; curCount = 1;
+    } else { curCount++; }
+  });
+  if (curCount > 0) monthSpans.push({ month: curMonth, count: curCount });
+
+  let html = '<thead><tr><th class="cal-name-th" rowspan="2">Mitarbeiter</th>';
+  monthSpans.forEach(ms =>
+    html += `<th class="cal-month-th" colspan="${ms.count}">${MONTH_NAMES[ms.month]}</th>`
+  );
+  html += '</tr><tr>';
+  weekNums.forEach(wn => html += `<th class="cal-week-th">${wn}</th>`);
+  html += '</tr></thead><tbody>';
+
+  filteredEmployees().forEach(emp => {
+    html += `<tr><td class="cal-name-cell">${emp.name}<div class="cal-sub">${emp.role}</div></td>`;
+    WEEKS.forEach((week, i) => {
+      const entry = getTypeForWeek(emp.key, week);
+      const type  = entry ? entry.type : null;
+      const bg    = type ? `background:${type.color}` : '';
+      const cls   = type ? '' : ' empty';
+      const proj  = entry && entry.project ? ` — ${entry.project}` : '';
+      const tip   = type ? `${type.label}${proj} — KW ${weekNums[i]}` : `Kein Eintrag — KW ${weekNums[i]}`;
+      html += `<td class="cal-cell${cls}" style="${bg}" title="${tip}"></td>`;
+    });
+    html += '</tr>';
+  });
+
+  html += '</tbody>';
+  table.innerHTML = html;
+}
+
+/* ── Render List ──────────────────────────────────────────────── */
+function renderList() {
+  const container = document.getElementById('list-view-container');
+  if (!container) return;
+
+  const fmt = d => d.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+
+  const grouped = {};
+  EMPLOYEES.forEach(emp => { grouped[emp.key] = { emp, entries: [] }; });
+  ENTRIES.forEach((e, idx) => {
+    if (grouped[e.empKey]) {
+      const type = AVAIL_TYPES.find(t => t.key === e.typeKey);
+      grouped[e.empKey].entries.push({ ...e, type, globalIdx: idx });
+    }
+  });
+
+  let html = '';
+  filteredEmployees().forEach(emp => {
+    const allEntries = grouped[emp.key].entries;
+    const sorted = allEntries
+      .filter(e => !filterTyp || e.typeKey === filterTyp)
+      .sort((a, b) => a.from - b.from);
+
+    html += `
+    <div class="manager-group" style="margin-bottom:20px">
+      <div class="manager-group-header">
+        <div style="font-weight:700;font-size:14px">${emp.name}</div>
+        <span style="font-size:12px;color:var(--c-text-muted);margin-left:6px">${emp.role}</span>
+        <span style="font-size:12px;color:var(--c-text-muted);margin-left:auto">Manager: ${emp.manager}</span>
+      </div>
+      <div class="emp-meta-row">
+        <span class="emp-meta-chip">BU: ${emp.bu}</span>
+        <span class="emp-meta-chip">Team: ${emp.teamId}</span>
+        <span class="emp-meta-chip">Region: ${emp.region}</span>
+        <span class="emp-meta-chip">Mobilität: ${emp.mobility}</span>
+        <span class="emp-meta-chip emp-meta-chip--rate">ab €${emp.dayRate.toLocaleString('de-DE')}/Tag</span>
+        ${emp.partTime ? '<span class="emp-meta-chip" style="color:#AB47BC;border-color:#E1BEE7;background:#F3E5F5">Teilzeit</span>' : ''}
+      </div>
+      <table class="data-table" style="border-top:none;border-radius:0 0 4px 4px">
+        <thead><tr><th>Typ</th><th>Von</th><th>Bis</th><th>Projekt / Notiz</th><th></th></tr></thead>
+        <tbody>`;
+
+    if (sorted.length === 0) {
+      html += `<tr><td colspan="5" style="color:var(--c-text-muted);font-style:italic;font-size:13px">Keine Einträge</td></tr>`;
+    } else {
+      sorted.forEach(e => {
+        html += `
+          <tr>
+            <td>
+              <div class="avail-type-badge">
+                <div class="avail-type-dot" style="background:${e.type.color}"></div>
+                ${e.type.label}
+              </div>
+            </td>
+            <td>${fmt(e.from)}</td>
+            <td>${fmt(e.to)}</td>
+            <td style="font-size:13px;color:var(--c-text-muted)">${e.project || '—'}</td>
+            <td style="text-align:right">
+              <button class="btn btn-outlined btn-sm" style="font-size:11px" data-edit-idx="${e.globalIdx}">Bearbeiten</button>
+            </td>
+          </tr>`;
+      });
+    }
+    html += `</tbody></table></div>`;
+  });
+
+  container.innerHTML = html;
+
+  container.querySelectorAll('[data-edit-idx]').forEach(btn => {
+    btn.addEventListener('click', () => openEditModal(parseInt(btn.dataset.editIdx)));
+  });
+}
+
+/* ── Render Overview ──────────────────────────────────────────── */
+function overviewCurrentStatus(empKey) {
+  const today = new Date(2026, 4, 21);
+  for (const e of ENTRIES) {
+    if (e.empKey !== empKey) continue;
+    if (e.typeKey === 'holiday') continue;
+    if (e.from <= today && e.to >= today) {
+      const type = AVAIL_TYPES.find(t => t.key === e.typeKey);
+      if (!type) continue;
+      return `<span style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;background:${type.color}20;color:${type.color};border:1px solid ${type.color}50">${type.label}</span>`;
+    }
+  }
+  return '<span style="color:var(--c-text-muted);font-size:12px">—</span>';
+}
+
+function renderOverview() {
+  const container = document.getElementById('overview-container');
+  if (!container) return;
+
+  const emps = filteredEmployees();
+  const countEl = document.getElementById('overview-count');
+  if (countEl) countEl.textContent = emps.length;
+
+  if (emps.length === 0) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-state-icon">○</div><div class="empty-state-title">Keine Mitarbeitenden gefunden</div><div class="empty-state-sub">Versuche einen anderen Filter.</div></div>';
+    return;
+  }
+
+  const BU_ORDER = ['TCD Süd', 'TCD Nord', 'TCD West'];
+  const groups = {};
+  BU_ORDER.forEach(bu => { groups[bu] = []; });
+  emps.forEach(emp => {
+    if (!groups[emp.bu]) groups[emp.bu] = [];
+    groups[emp.bu].push(emp);
+  });
+
+  let html = '<table class="data-table">' +
+    '<thead><tr>' +
+    '<th>Name</th><th>Rolle</th><th>Manager</th><th>Aktuell</th>' +
+    '<th>Verfügbar ab</th><th>Region</th><th>Mobilität</th><th>Tagessatz</th>' +
+    '</tr></thead><tbody>';
+
+  BU_ORDER.forEach(bu => {
+    const buEmps = groups[bu];
+    if (!buEmps || buEmps.length === 0) return;
+
+    html += `<tr><td colspan="8" style="background:var(--c-bg);font-weight:700;font-size:11px;color:var(--c-text-muted);padding:8px 12px;border-bottom:1px solid var(--c-border);letter-spacing:0.06em;text-transform:uppercase">${bu} &mdash; ${buEmps.length} ${buEmps.length === 1 ? 'Person' : 'Personen'}</td></tr>`;
+
+    buEmps.forEach(emp => {
+      const avail = AVAIL_FROM[emp.key] || '—';
+      const availStyle = avail === 'Sofort' ? 'color:#2E7D32;font-weight:600' : '';
+      html += `<tr style="cursor:pointer" onclick="openPersonDrawer('${emp.key}')" title="${emp.name} bearbeiten">` +
+        `<td><div style="font-weight:500">${emp.name}</div>${emp.partTime ? '<div style="font-size:11px;color:#AB47BC">Teilzeit</div>' : ''}</td>` +
+        `<td style="font-size:13px">${emp.role}</td>` +
+        `<td style="font-size:13px;color:var(--c-text-muted)">${emp.manager}</td>` +
+        `<td>${overviewCurrentStatus(emp.key)}</td>` +
+        `<td style="font-size:13px;${availStyle}">${avail}</td>` +
+        `<td style="font-size:13px">${emp.region}</td>` +
+        `<td style="font-size:13px">${emp.mobility}</td>` +
+        `<td style="font-size:13px;color:#1976D2;font-weight:500">€${emp.dayRate.toLocaleString('de-DE')}</td>` +
+        `</tr>`;
+    });
+  });
+
+  html += '</tbody></table>';
+  container.innerHTML = html;
+}
+
+/* ── Modal ────────────────────────────────────────────────────── */
+const overlay    = document.getElementById('modal-overlay');
+const mEmpSel    = document.getElementById('m-employee');
+const mTypSel    = document.getElementById('m-type');
+const modalTitle = document.getElementById('modal-title');
+
+function closeModal() {
+  overlay.classList.remove('open');
+  mEmpSel.value = '';
+  mTypSel.value = '';
+  document.getElementById('m-from').value    = '';
+  document.getElementById('m-to').value      = '';
+  document.getElementById('m-project').value = '';
+  editingIdx = -1;
+  modalTitle.textContent = 'Verfügbarkeit eintragen';
+}
+
+function openEditModal(idx) {
+  const e = ENTRIES[idx];
+  if (!e) return;
+  editingIdx    = idx;
+  mEmpSel.value = e.empKey;
+  mTypSel.value = e.typeKey;
+  const toISO = d => d.toISOString().split('T')[0];
+  document.getElementById('m-from').value    = toISO(e.from);
+  document.getElementById('m-to').value      = toISO(e.to);
+  document.getElementById('m-project').value = e.project || '';
+  modalTitle.textContent = 'Eintrag bearbeiten';
+  overlay.classList.add('open');
+}
+
+function initAvailabilityModal() {
+  EMPLOYEES.forEach(e => {
+    const opt = document.createElement('option');
+    opt.value = e.key;
+    opt.textContent = `${e.name} — ${e.role}`;
+    mEmpSel.appendChild(opt);
+  });
+  AVAIL_TYPES.forEach(t => {
+    const opt = document.createElement('option');
+    opt.value = t.key;
+    opt.textContent = t.label;
+    mTypSel.appendChild(opt);
+  });
+
+  document.getElementById('add-entry-btn')?.addEventListener('click', () => {
+    editingIdx = -1;
+    modalTitle.textContent = 'Verfügbarkeit eintragen';
+    overlay.classList.add('open');
+  });
+
+  document.getElementById('modal-close')?.addEventListener('click',  closeModal);
+  document.getElementById('modal-cancel')?.addEventListener('click', closeModal);
+  overlay?.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
+
+  document.getElementById('modal-save')?.addEventListener('click', () => {
+    const empKey  = mEmpSel.value;
+    const typeKey = mTypSel.value;
+    const fromVal = document.getElementById('m-from').value;
+    const toVal   = document.getElementById('m-to').value;
+    const project = document.getElementById('m-project').value.trim();
+
+    if (!empKey || !typeKey || !fromVal || !toVal) {
+      alert('Bitte alle Pflichtfelder ausfüllen.');
+      return;
+    }
+    if (toVal < fromVal) {
+      alert('Das Bis-Datum muss nach dem Von-Datum liegen.');
+      return;
+    }
+
+    const wasEditing = editingIdx >= 0;
+    const newEntry   = { empKey, typeKey, from: new Date(fromVal), to: new Date(toVal), project };
+
+    if (wasEditing) { ENTRIES[editingIdx] = newEntry; }
+    else            { ENTRIES.push(newEntry); }
+
+    closeModal();
+    renderList();
+    renderCalendar();
+    renderOverview();
+    showSnackbar(wasEditing ? 'Eintrag wurde aktualisiert.' : 'Verfügbarkeit wurde gespeichert.');
+  });
+}
+
+/* ── Filters Init ─────────────────────────────────────────────── */
+function initFilters() {
+  const empSel = document.getElementById('f-emp');
+  const mgrSel = document.getElementById('f-mgr');
+  const typSel = document.getElementById('f-typ');
+
+  [{ value: '', text: 'Alle' }, ...EMPLOYEES.map(e => ({ value: e.key, text: e.name }))].forEach(o => {
+    const opt = document.createElement('option');
+    opt.value = o.value;
+    opt.textContent = o.text;
+    empSel.appendChild(opt);
+  });
+
+  [{ value: '', text: 'Alle' }, ...AVAIL_TYPES.map(t => ({ value: t.key, text: t.label }))].forEach(o => {
+    const opt = document.createElement('option');
+    opt.value = o.value;
+    opt.textContent = o.text;
+    typSel.appendChild(opt);
+  });
+
+  function onFilterChange() {
+    filterEmp     = empSel.value;
+    filterManager = mgrSel.value;
+    filterTyp     = typSel.value;
+    // Sync "Mein Team" button state when manager filter changes externally
+    myTeamActive = (filterManager === 'Anna Schmidt' && !filterEmp && !filterTyp);
+    const btn = document.getElementById('my-team-btn');
+    if (btn) btn.textContent = myTeamActive ? 'Alle anzeigen' : '\u{1F465} Mein Team (TCD Süd)';
+    renderList();
+    renderCalendar();
+    renderOverview();
+  }
+
+  empSel.addEventListener('change', onFilterChange);
+  mgrSel.addEventListener('change', onFilterChange);
+  typSel.addEventListener('change', onFilterChange);
+
+  document.getElementById('show-holiday').addEventListener('change', e => {
+    showHoliday = e.target.checked;
+    renderLegend();
+    renderCalendar();
+  });
+
+  document.getElementById('my-team-btn')?.addEventListener('click', () => {
+    myTeamActive = !myTeamActive;
+    const mgrSel = document.getElementById('f-mgr');
+    mgrSel.value  = myTeamActive ? 'Anna Schmidt' : '';
+    filterManager = mgrSel.value;
+    filterEmp     = empSel.value;
+    filterTyp     = typSel.value;
+    const btn = document.getElementById('my-team-btn');
+    btn.textContent = myTeamActive ? 'Alle anzeigen' : '\u{1F465} Mein Team (TCD Süd)';
+    renderList();
+    renderCalendar();
+    renderOverview();
+  });
+}
+
+/* ── Opportunity History per Employee ────────────────────────── */
+var OPP_HISTORY = {
+  mm: [
+    { title: 'Backend-Projekt Datenmigration', client: 'Hypoteq AG',        date: '12.03.2026', score: 91, status: 'genehmigt' },
+    { title: 'Cloud Architect AWS',             client: 'TechCorp AG',       date: '08.01.2026', score: 87, status: 'beauftragt' },
+    { title: 'API Platform Modernisierung',     client: 'Deutsche Bank',     date: '15.09.2025', score: 79, status: 'nicht_beauftragt' },
+  ],
+  sk: [
+    { title: 'Backend-Projekt Datenmigration', client: 'Hypoteq AG',        date: '12.03.2026', score: 84, status: 'in_pruefung' },
+    { title: 'Retail Banking Backend',          client: 'Commerzbank',       date: '10.11.2025', score: 76, status: 'beauftragt' },
+    { title: 'Core Banking API',                client: 'Hypoteq AG',        date: '04.06.2025', score: 68, status: 'nicht_beauftragt' },
+  ],
+  fw: [
+    { title: 'Backend-Projekt Datenmigration', client: 'Hypoteq AG',        date: '12.03.2026', score: 69, status: 'angeboten' },
+    { title: 'Serverless Migration AWS',        client: 'IPSWAYS Insurance', date: '03.02.2026', score: 82, status: 'nicht_beauftragt' },
+    { title: 'DevOps Platform Setup',           client: 'TechCorp AG',       date: '14.10.2025', score: 74, status: 'abgelehnt' },
+  ],
+  pk: [
+    { title: 'Retail Banking Project',          client: 'Sparkasse',         date: '02.01.2026', score: 94, status: 'beauftragt' },
+    { title: 'Core Banking Transformation',     client: 'Deutsche Bank',     date: '14.10.2025', score: 88, status: 'nicht_beauftragt' },
+    { title: 'Payments Modernisierung',         client: 'BaFin',             date: '20.05.2025', score: 91, status: 'beauftragt' },
+  ],
+  ls: [
+    { title: 'Backend-Projekt Datenmigration', client: 'Hypoteq AG',        date: '18.04.2026', score: 61, status: 'angeboten' },
+    { title: 'Microservices Migration',         client: 'TechCorp AG',       date: '12.02.2026', score: 55, status: 'nicht_beauftragt' },
+  ],
+  tb: [
+    { title: 'Backend-Projekt Datenmigration', client: 'Hypoteq AG',        date: '12.03.2026', score: 78, status: 'in_pruefung' },
+    { title: 'BI Beratung IVF Verbesserung',   client: 'IVF GmbH',          date: '05.01.2026', score: 90, status: 'beauftragt' },
+    { title: 'Cloud Strategy Consulting',       client: 'Allianz SE',        date: '20.09.2025', score: 72, status: 'abgelehnt' },
+    { title: 'Data Warehouse Modernisierung',   client: 'Siemens AG',        date: '03.04.2025', score: 85, status: 'beauftragt' },
+  ],
+  jr: [
+    { title: 'Backend-Projekt Datenmigration', client: 'Hypoteq AG',        date: '12.03.2026', score: 61, status: 'angeboten' },
+    { title: 'Stratify GmbH Prozessopt.',       client: 'Stratify GmbH',     date: '28.01.2026', score: 85, status: 'beauftragt' },
+    { title: 'Insurance Backend',               client: 'IPSWAYS Insurance', date: '11.09.2025', score: 63, status: 'nicht_beauftragt' },
+  ],
+  mw: [
+    { title: 'Container Migration',             client: 'TechCorp AG',       date: '03.01.2026', score: 95, status: 'beauftragt' },
+    { title: 'Container Plattform Initiative',  client: 'Lars Gehrken',      date: '10.04.2026', score: 88, status: 'angeboten' },
+    { title: 'Kubernetes Platform Build',       client: 'Allianz SE',        date: '18.08.2025', score: 91, status: 'nicht_beauftragt' },
+  ],
+  sb2: [
+    { title: 'Prozessoptimierung Q1',           client: 'Interne Initiative',date: '07.01.2026', score: 79, status: 'beauftragt' },
+    { title: 'Business Analysten IT-Consulting',client: 'IPSWAYS Insurance', date: '02.04.2026', score: 71, status: 'angeboten' },
+    { title: 'Anforderungsmanagement Banking',  client: 'Deutsche Bank',     date: '05.10.2025', score: 74, status: 'nicht_beauftragt' },
+  ],
+  lm: [
+    { title: 'Insurance Analytics Platform',    client: 'Allianz SE',        date: '15.10.2025', score: 96, status: 'beauftragt' },
+    { title: 'Backend-Projekt Datenmigration',  client: 'Hypoteq AG',        date: '12.03.2026', score: 74, status: 'angeboten' },
+    { title: 'Digital Transformation Lead',     client: 'BaFin',             date: '22.06.2025', score: 89, status: 'nicht_beauftragt' },
+  ],
+  pn: [
+    { title: 'Insurance Analytics',             client: 'IPSWAYS Insurance', date: '05.01.2026', score: 93, status: 'beauftragt' },
+    { title: 'Digital Insurance Platform RfP',  client: 'IPSWAYS Insurance', date: '10.05.2026', score: 89, status: 'in_pruefung' },
+    { title: 'Wealth Management Platform',      client: 'Deutsche Bank',     date: '08.09.2025', score: 87, status: 'beauftragt' },
+  ],
+  gv: [
+    { title: 'Agile Transformation',            client: 'Siemens AG',        date: '04.01.2026', score: 91, status: 'beauftragt' },
+    { title: 'Business Analysten IT-Consulting',client: 'IPSWAYS Insurance', date: '02.04.2026', score: 71, status: 'angeboten' },
+    { title: 'Scrum Coaching Initiative',       client: 'Deutsche Bank',     date: '12.11.2025', score: 84, status: 'nicht_beauftragt' },
+    { title: 'SAFe Transformation Retail',      client: 'Commerzbank',       date: '15.05.2025', score: 88, status: 'beauftragt' },
+  ],
+};
+
+var HIST_STATUS_CONFIG = {
+  beauftragt:       { bg: '#E8F5E9', col: '#2E7D32', label: '✓ Beauftragt' },
+  genehmigt:        { bg: '#E8F5E9', col: '#2E7D32', label: '✓ Genehmigt' },
+  in_pruefung:      { bg: '#E3F0FC', col: '#1256A0', label: '◷ In Prüfung' },
+  angeboten:        { bg: '#F5F5F5', col: '#616161', label: '→ Angeboten' },
+  nicht_beauftragt: { bg: '#FFF8E1', col: '#F57F17', label: '○ Nicht beauftragt' },
+  abgelehnt:        { bg: '#FFEBEE', col: '#C62828', label: '✗ Abgelehnt' },
+};
+
+/* ── Person Drawer ────────────────────────────────────────────── */
+var AVATAR_COLORS = { mm:'#1976D2', sk:'#388E3C', fw:'#F57C00', pk:'#7B1FA2', ls:'#00796B', tb:'#795548', jr:'#E53935', mw:'#546E7A', sb2:'#0097A7', lm:'#EC407A', pn:'#1565C0', gv:'#558B2F' };
+
+function openPersonDrawer(empKey) {
+  var emp = EMPLOYEES.find(function(e){ return e.key === empKey; });
+  if (!emp) return;
+
+  var initials = emp.name.split(' ').map(function(w){ return w[0]; }).join('').slice(0,2).toUpperCase();
+  var avatarEl = document.getElementById('pd-avatar');
+  avatarEl.textContent = initials;
+  avatarEl.style.background = AVATAR_COLORS[empKey] || '#1976D2';
+
+  document.getElementById('pd-name').textContent = emp.name;
+  document.getElementById('pd-role').textContent = emp.role;
+  document.getElementById('pd-bu').textContent   = emp.bu + ' · Manager: ' + emp.manager;
+  document.getElementById('pd-rate').textContent  = '€' + emp.dayRate.toLocaleString('de-DE') + ' / Tag';
+
+  var avail = AVAIL_FROM[empKey] || '—';
+  document.getElementById('pd-avail').textContent = avail;
+  document.getElementById('pd-avail').style.color  = avail === 'Sofort' ? '#2E7D32' : 'var(--c-text)';
+
+  var today = new Date(2026, 4, 21);
+  var statusHtml = '<span style="color:var(--c-text-muted);font-size:13px">—</span>';
+  for (var i = 0; i < ENTRIES.length; i++) {
+    var e = ENTRIES[i];
+    if (e.empKey !== empKey || e.typeKey === 'holiday') continue;
+    if (e.from <= today && e.to >= today) {
+      var type = AVAIL_TYPES.find(function(t){ return t.key === e.typeKey; });
+      if (type) statusHtml = '<span style="display:inline-block;padding:2px 10px;border-radius:10px;font-size:12px;font-weight:600;background:' + type.color + '20;color:' + type.color + ';border:1px solid ' + type.color + '50">' + type.label + (e.project ? ' — ' + e.project : '') + '</span>';
+      break;
+    }
+  }
+  document.getElementById('pd-status').innerHTML = statusHtml;
+
+  document.getElementById('pd-edit-rate').value      = emp.dayRate;
+  document.getElementById('pd-edit-region').value    = emp.region;
+  document.getElementById('pd-edit-mobility').value  = emp.mobility;
+  document.getElementById('pd-edit-parttime').checked = emp.partTime;
+  document.getElementById('pd-edit-avail').value     = (avail !== '—') ? avail : '';
+  document.getElementById('pd-edit-notes').value     = '';
+
+  var fmt = function(d){ return d.toLocaleDateString('de-DE', {day:'2-digit',month:'2-digit',year:'numeric'}); };
+  var entriesHtml = '';
+  ENTRIES.filter(function(e){ return e.empKey === empKey; })
+    .sort(function(a,b){ return a.from - b.from; })
+    .forEach(function(e) {
+      var t = AVAIL_TYPES.find(function(t){ return t.key === e.typeKey; });
+      if (!t) return;
+      entriesHtml += '<div style="display:flex;align-items:center;gap:8px;font-size:13px">' +
+        '<div style="width:10px;height:10px;border-radius:50%;background:' + t.color + ';flex-shrink:0"></div>' +
+        '<span style="min-width:130px;color:var(--c-text-muted)">' + fmt(e.from) + ' – ' + fmt(e.to) + '</span>' +
+        '<span>' + t.label + (e.project ? ': ' + e.project : '') + '</span>' +
+        '</div>';
+    });
+  document.getElementById('pd-entries').innerHTML = entriesHtml || '<span style="color:var(--c-text-muted);font-size:13px">Keine Einträge vorhanden.</span>';
+
+  // Opportunity history
+  var hist = (OPP_HISTORY[empKey] || []).slice().sort(function(a, b) {
+    // Sort: active statuses first, then by date descending
+    var order = { in_pruefung: 0, angeboten: 1, genehmigt: 2, beauftragt: 3, nicht_beauftragt: 4, abgelehnt: 5 };
+    var oa = order[a.status] !== undefined ? order[a.status] : 9;
+    var ob = order[b.status] !== undefined ? order[b.status] : 9;
+    if (oa !== ob) return oa - ob;
+    return b.date.split('.').reverse().join('') > a.date.split('.').reverse().join('') ? -1 : 1;
+  });
+
+  var wonCount  = hist.filter(function(h){ return h.status === 'beauftragt' || h.status === 'genehmigt'; }).length;
+  var totalDecided = hist.filter(function(h){ return h.status !== 'angeboten' && h.status !== 'in_pruefung'; }).length;
+  var hitRate = totalDecided ? Math.round(wonCount / totalDecided * 100) : null;
+  document.getElementById('pd-hist-summary').innerHTML =
+    hist.length
+      ? hist.length + ' Einträge' + (hitRate !== null ? ' &nbsp;·&nbsp; <span style="color:' + (hitRate >= 60 ? '#2E7D32' : '#E65100') + ';font-weight:600">Hit-Rate ' + hitRate + '%</span>' : '')
+      : '';
+
+  var histHtml = '';
+  if (hist.length === 0) {
+    histHtml = '<span style="color:var(--c-text-muted);font-size:13px">Noch keine Opportunity-Matches vorhanden.</span>';
+  } else {
+    hist.forEach(function(h) {
+      var sc = HIST_STATUS_CONFIG[h.status] || HIST_STATUS_CONFIG['angeboten'];
+      var scoreColor = h.score >= 80 ? '#2E7D32' : h.score >= 65 ? '#E65100' : '#C62828';
+      histHtml +=
+        '<div style="padding:10px 12px;border:1px solid var(--c-border);border-radius:6px;background:#FAFAFA">' +
+          '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:5px">' +
+            '<div style="font-size:13px;font-weight:600;color:var(--c-text-primary);line-height:1.3">' + h.title + '</div>' +
+            '<span style="padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;white-space:nowrap;flex-shrink:0;background:' + sc.bg + ';color:' + sc.col + '">' + sc.label + '</span>' +
+          '</div>' +
+          '<div style="display:flex;gap:14px;font-size:12px;color:var(--c-text-muted);flex-wrap:wrap;align-items:center">' +
+            '<span style="display:flex;align-items:center;gap:4px"><span style="font-size:10px">🏢</span>' + h.client + '</span>' +
+            '<span style="display:flex;align-items:center;gap:4px"><span style="font-size:10px">📅</span>' + h.date + '</span>' +
+            (h.score ? '<span style="font-weight:700;color:' + scoreColor + '">Score ' + h.score + '</span>' : '') +
+          '</div>' +
+        '</div>';
+    });
+  }
+  document.getElementById('pd-opp-history').innerHTML = histHtml;
+
+  document.getElementById('person-overlay').classList.add('open');
+  document.getElementById('person-drawer').classList.add('open');
+}
+
+function closePersonDrawer() {
+  document.getElementById('person-drawer').classList.remove('open');
+  document.getElementById('person-overlay').classList.remove('open');
+}
+
+document.getElementById('pd-close').addEventListener('click', closePersonDrawer);
+document.getElementById('pd-cancel-btn').addEventListener('click', closePersonDrawer);
+document.getElementById('person-overlay').addEventListener('click', closePersonDrawer);
+document.getElementById('pd-save-btn').addEventListener('click', function() {
+  showSnackbar('Personendaten gespeichert.');
+  closePersonDrawer();
+});
+
+/* ── Excel Export ─────────────────────────────────────────────── */
+document.getElementById('export-excel-btn')?.addEventListener('click', function() {
+  showSnackbar('Excel-Export wird vorbereitet… Download startet in Kürze.');
+});
+
+/* ── Boot ─────────────────────────────────────────────────────── */
+renderLegend();
+renderCalendar();
+renderList();
+renderOverview();
+initAvailabilityModal();
+initFilters();
+</script>
+  <script src="feature-toggle.js"></script>
+</body>
+</html>

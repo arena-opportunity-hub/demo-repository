@@ -1,0 +1,446 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Neue Opportunity — AI-assistiert — Opportunity Hub</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* ── AI-input page ── */
+    .ai-card {
+      background: #fff;
+      border: 1px solid var(--c-border);
+      border-radius: 10px;
+      padding: 28px 32px;
+      max-width: 780px;
+    }
+    .ai-card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--c-text-primary);
+      margin-bottom: 6px;
+    }
+    .ai-card-sub {
+      font-size: 13px;
+      color: var(--c-text-muted);
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+    #ai-text-input {
+      width: 100%;
+      box-sizing: border-box;
+      resize: vertical;
+      min-height: 160px;
+      font-family: inherit;
+    }
+    /* ── Spinner ── */
+    .ai-spinner-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 60px 0;
+      color: var(--c-text-muted);
+      font-size: 14px;
+    }
+    .ai-spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid #E3F0FC;
+      border-top-color: var(--c-primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Mapped form + chat ── */
+    .ai-mapped-wrap {
+      display: flex;
+      gap: 24px;
+      align-items: flex-start;
+      max-width: 1100px;
+    }
+    .ai-form-col {
+      flex: 1;
+      min-width: 0;
+    }
+    .ai-chat-col {
+      width: 300px;
+      flex-shrink: 0;
+      position: sticky;
+      top: 20px;
+    }
+    .ai-chat-panel {
+      background: #fff;
+      border: 1px solid var(--c-border);
+      border-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .ai-chat-header {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--c-border);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--c-text-primary);
+      background: #F8FAFD;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .ai-chat-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #4CAF50;
+      flex-shrink: 0;
+    }
+    .ai-chat-messages {
+      padding: 12px 16px;
+      min-height: 120px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .ai-msg {
+      font-size: 12px;
+      padding: 7px 10px;
+      border-radius: 8px;
+      line-height: 1.4;
+    }
+    .ai-msg-system {
+      background: #E3F0FC;
+      color: #1256A0;
+      align-self: flex-start;
+    }
+    .ai-msg-user {
+      background: #F5F5F5;
+      color: var(--c-text-primary);
+      align-self: flex-end;
+    }
+    .ai-chat-input-row {
+      display: flex;
+      gap: 6px;
+      padding: 10px 12px;
+      border-top: 1px solid var(--c-border);
+    }
+    .ai-chat-input-row input {
+      flex: 1;
+      min-width: 0;
+    }
+    .ai-mapped-banner {
+      padding: 10px 14px;
+      background: #E8F5E9;
+      border: 1px solid #C8E6C9;
+      border-radius: 8px;
+      font-size: 13px;
+      color: #1B5E20;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+      max-width: 780px;
+    }
+  </style>
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- ── Sidebar ──────────────────────────────────────────────── -->
+  <aside class="sidebar"></aside>
+
+  <!-- ── Main ─────────────────────────────────────────────────── -->
+  <main class="main-content">
+
+    <header class="page-header">
+      <div>
+        <a href="new-opportunity.html" class="breadcrumb">← Modus-Auswahl</a>
+        <div class="step-indicator" style="margin-top:6px">Schritt 2 von 3</div>
+        <h1>Neue Opportunity</h1>
+      </div>
+    </header>
+
+    <div class="page-content">
+
+      <!-- ── Step 1: Text Input ─────────────────────────────────── -->
+      <div id="step-input">
+        <div class="ai-card">
+          <div class="ai-card-title">Ausschreibungstext einfügen</div>
+          <div class="ai-card-sub">
+            Füge den Originaltext der Ausschreibung, eine E-Mail oder eine Projektbeschreibung ein.<br>
+            Der AI-Assistent erkennt automatisch Titel, Kunde, Skills, Zeitraum und weitere Felder.
+          </div>
+          <textarea
+            id="ai-text-input"
+            class="input-outlined"
+            placeholder="Hier den Text einfügen — z.B. &quot;Wir suchen einen Senior Java Entwickler für ein AWS-Migrationsprojekt bei der Hypoteq AG. Start: 01.07.2026, 6 Monate, Remote, Tagessatz bis 1.400 €. Skills: Java, Spring Boot, AWS, Docker, PostgreSQL...&quot;"
+          ></textarea>
+          <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:16px">
+            <a href="new-opportunity.html" class="btn btn-text">Abbrechen</a>
+            <button class="btn btn-primary" id="ai-submit-btn" disabled>Felder erkennen</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Step 2: Processing ─────────────────────────────────── -->
+      <div id="step-loading" style="display:none">
+        <div class="ai-spinner-wrap">
+          <div class="ai-spinner"></div>
+          <div>Felder werden erkannt…</div>
+        </div>
+      </div>
+
+      <!-- ── Step 3: Mapped Form + Chat ────────────────────────── -->
+      <div id="step-mapped" style="display:none">
+        <div class="ai-mapped-banner">
+          <span style="font-size:16px">✓</span>
+          <span><strong>Felder automatisch befüllt.</strong> Prüfe die vorgeschlagenen Werte und passe sie bei Bedarf an.</span>
+        </div>
+        <div class="ai-mapped-wrap">
+          <!-- Left: form -->
+          <div class="ai-form-col">
+            <form id="ai-opp-form" class="form-wrapper" novalidate>
+
+              <!-- Projekt -->
+              <section class="form-section">
+                <h2 class="form-section-title">Projekt</h2>
+                <div class="form-grid">
+                  <div class="form-field">
+                    <label for="ai-title">Titel <span class="required">*</span></label>
+                    <input type="text" id="ai-title" class="input-outlined" value="Senior Java Entwickler AWS-Migration" autocomplete="off" required />
+                  </div>
+                  <div class="form-field">
+                    <label for="ai-client">Kunde / Projekt</label>
+                    <input type="text" id="ai-client" class="input-outlined" value="Hypoteq AG" autocomplete="off" />
+                  </div>
+                </div>
+              </section>
+
+              <!-- Ziele & Aufgaben -->
+              <section class="form-section">
+                <h2 class="form-section-title">Ziele &amp; Aufgaben</h2>
+                <div class="form-field">
+                  <label for="ai-goal">Projektziel <span class="required">*</span></label>
+                  <textarea id="ai-goal" class="input-outlined" rows="3" required>Migration der bestehenden On-Premise-Infrastruktur nach AWS mit Fokus auf Hochverfügbarkeit und Skalierbarkeit.</textarea>
+                </div>
+                <div class="form-field">
+                  <label for="ai-tasks">Aufgaben</label>
+                  <textarea id="ai-tasks" class="input-outlined" rows="3">Architekturdesign, Backend-Entwicklung mit Spring Boot, AWS-Infrastruktur (EC2, RDS, S3), CI/CD-Aufbau mit GitHub Actions.</textarea>
+                </div>
+              </section>
+
+              <!-- Skills -->
+              <section class="form-section">
+                <h2 class="form-section-title">Geforderte Skills</h2>
+                <div class="skill-rows" id="ai-skill-rows"></div>
+                <button type="button" class="btn btn-outlined btn-sm" id="ai-add-skill-btn" style="margin-top:8px">+ Skill hinzufügen</button>
+              </section>
+
+              <!-- Zeitleiste & Auslastung -->
+              <section class="form-section">
+                <h2 class="form-section-title">Zeitleiste &amp; Auslastung</h2>
+                <div class="form-grid form-grid-3">
+                  <div class="form-field">
+                    <label for="ai-start">Startdatum <span class="required">*</span></label>
+                    <input type="date" id="ai-start" class="input-outlined" value="2026-07-01" required />
+                  </div>
+                  <div class="form-field">
+                    <label for="ai-end">Enddatum</label>
+                    <input type="date" id="ai-end" class="input-outlined" value="2026-12-31" />
+                  </div>
+                  <div class="form-field">
+                    <label for="ai-workload">Auslastung</label>
+                    <select id="ai-workload" class="input-outlined">
+                      <option value="">— wählen —</option>
+                      <option value="25">25 %</option>
+                      <option value="50">50 %</option>
+                      <option value="75">75 %</option>
+                      <option value="100" selected>100 %</option>
+                    </select>
+                  </div>
+                </div>
+              </section>
+
+              <!-- Konditionen & Relevanz -->
+              <section class="form-section">
+                <h2 class="form-section-title">Konditionen &amp; Relevanz</h2>
+                <div class="form-grid">
+                  <div class="form-field">
+                    <label for="ai-submission">Abgabe Termin</label>
+                    <input type="date" id="ai-submission" class="input-outlined" value="2026-06-15" />
+                  </div>
+                  <div class="form-field">
+                    <label for="ai-dayrate">Tagessatz (€)</label>
+                    <input type="number" id="ai-dayrate" class="input-outlined" value="1400" min="0" step="50" />
+                  </div>
+                </div>
+                <div class="form-grid form-grid-3">
+                  <div class="form-field">
+                    <label for="ai-onsite">Onsite / Remote</label>
+                    <select id="ai-onsite" class="input-outlined">
+                      <option value="">— wählen —</option>
+                      <option value="onsite">Vor Ort</option>
+                      <option value="hybrid">Hybrid</option>
+                      <option value="remote" selected>Remote</option>
+                    </select>
+                  </div>
+                  <div class="form-field">
+                    <label for="ai-budget">Budget / Projekttage</label>
+                    <input type="number" id="ai-budget" class="input-outlined" placeholder="z. B. 120" min="0" />
+                  </div>
+                  <div class="form-field">
+                    <label for="ai-relevanz">FinCon Company Relevanz</label>
+                    <select id="ai-relevanz" class="input-outlined">
+                      <option value="">— wählen —</option>
+                      <option value="hoch" selected>Hoch</option>
+                      <option value="mittel">Mittel</option>
+                      <option value="niedrig">Niedrig</option>
+                    </select>
+                  </div>
+                </div>
+              </section>
+
+              <!-- Actions -->
+              <div class="form-actions">
+                <a href="my-opportunities.html" class="btn btn-text">Abbrechen</a>
+                <div style="display:flex;gap:8px">
+                  <button type="button" class="btn btn-text" onclick="location.href='my-opportunities.html'">Entwurf speichern</button>
+                  <button type="submit" class="btn btn-primary">Matches finden</button>
+                </div>
+              </div>
+
+            </form>
+          </div><!-- /ai-form-col -->
+
+          <!-- Right: Chat -->
+          <div class="ai-chat-col">
+            <div class="ai-chat-panel">
+              <div class="ai-chat-header">
+                <div class="ai-chat-dot"></div>
+                AI-Assistent
+              </div>
+              <div class="ai-chat-messages" id="ai-chat-msgs">
+                <div class="ai-msg ai-msg-system">Ich habe die Felder aus deinem Text befüllt. Du kannst mich bitten, einzelne Felder anzupassen — z.&nbsp;B. <em>„Tagessatz auf 1200 setzen"</em> oder <em>„Skills um Kubernetes ergänzen"</em>.</div>
+              </div>
+              <div class="ai-chat-input-row">
+                <input type="text" id="ai-chat-input" class="input-outlined" placeholder="Feld anpassen…" style="font-size:13px" />
+                <button class="btn btn-primary btn-sm" id="ai-chat-send">→</button>
+              </div>
+            </div>
+          </div><!-- /ai-chat-col -->
+
+        </div><!-- /ai-mapped-wrap -->
+      </div><!-- /step-mapped -->
+
+    </div><!-- /page-content -->
+  </main>
+
+</div><!-- /app-shell -->
+<script src="features.js"></script>
+<script src="sidebar.js"></script>
+<script src="script.js"></script>
+<script>
+(function () {
+  var STAR_LABELS = { 5: 'Expert', 4: 'Erfahren', 3: 'Mittel', 2: 'Grundkenntnisse', 1: 'Einsteiger' };
+  var skillIdx = 0;
+
+  function createSkillRow(name, stars) {
+    name  = name  || '';
+    stars = stars || 3;
+    var idx = skillIdx++;
+    var div = document.createElement('div');
+    div.className = 'skill-row';
+    var starsHtml = [5, 4, 3, 2, 1].map(function(n) {
+      return '<input type="radio" id="ai-sr-' + idx + '-' + n + '" name="ai-skill-stars-' + idx + '" value="' + n + '" ' + (n === stars ? 'checked' : '') + ' />' +
+             '<label for="ai-sr-' + idx + '-' + n + '" title="' + STAR_LABELS[n] + '">★</label>';
+    }).join('');
+    div.innerHTML =
+      '<input type="text" class="skill-row-name input-outlined" value="' + name + '" placeholder="Skill-Name" autocomplete="off" />' +
+      '<div class="star-input">' + starsHtml + '</div>' +
+      '<span class="skill-row-level-label">' + STAR_LABELS[stars] + '</span>' +
+      '<button type="button" class="skill-row-remove" title="Entfernen">✕</button>';
+    div.querySelectorAll('input[type="radio"]').forEach(function(r) {
+      r.addEventListener('change', function() {
+        div.querySelector('.skill-row-level-label').textContent = STAR_LABELS[+r.value];
+      });
+    });
+    div.querySelector('.skill-row-remove').addEventListener('click', function() { div.remove(); });
+    return div;
+  }
+
+  var skillRowsEl = document.getElementById('ai-skill-rows');
+  if (skillRowsEl) {
+    ['Java','AWS','Spring Boot','Docker','PostgreSQL'].forEach(function(s) {
+      skillRowsEl.appendChild(createSkillRow(s, s === 'Java' || s === 'AWS' ? 4 : 3));
+    });
+    document.getElementById('ai-add-skill-btn').addEventListener('click', function() {
+      skillRowsEl.appendChild(createSkillRow('', 3));
+    });
+  }
+
+  // Step 1 → enable button when text is entered
+  var textInput = document.getElementById('ai-text-input');
+  var submitBtn = document.getElementById('ai-submit-btn');
+  textInput && textInput.addEventListener('input', function() {
+    submitBtn.disabled = this.value.trim().length < 10;
+  });
+
+  // Fertig → loading → mapped
+  submitBtn && submitBtn.addEventListener('click', function() {
+    document.getElementById('step-input').style.display   = 'none';
+    document.getElementById('step-loading').style.display = '';
+    setTimeout(function() {
+      document.getElementById('step-loading').style.display = 'none';
+      document.getElementById('step-mapped').style.display  = '';
+    }, 1600);
+  });
+
+  // Chat refinement
+  var chatInput = document.getElementById('ai-chat-input');
+  var chatSend  = document.getElementById('ai-chat-send');
+  var chatMsgs  = document.getElementById('ai-chat-msgs');
+
+  function addMsg(text, cls) {
+    var div = document.createElement('div');
+    div.className = 'ai-msg ' + cls;
+    div.textContent = text;
+    chatMsgs.appendChild(div);
+    chatMsgs.scrollTop = chatMsgs.scrollHeight;
+  }
+
+  function sendChat() {
+    var val = chatInput.value.trim();
+    if (!val) return;
+    addMsg(val, 'ai-msg-user');
+    chatInput.value = '';
+    setTimeout(function() {
+      addMsg('Änderung wird verarbeitet…', 'ai-msg-system');
+      setTimeout(function() {
+        chatMsgs.lastChild.remove();
+        addMsg('Erledigt — bitte das entsprechende Feld prüfen.', 'ai-msg-system');
+        showSnackbar('Feld aktualisiert.');
+      }, 900);
+    }, 400);
+  }
+
+  chatSend  && chatSend.addEventListener('click', sendChat);
+  chatInput && chatInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') { e.preventDefault(); sendChat(); }
+  });
+
+  // Form submit
+  var form = document.getElementById('ai-opp-form');
+  form && form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    var title = document.getElementById('ai-title').value.trim();
+    if (!title) { alert('Titel ist ein Pflichtfeld.'); return; }
+    showSnackbar('Opportunity gespeichert. Matches werden berechnet…');
+    setTimeout(function() { location.href = 'matches.html'; }, 1400);
+  });
+})();
+</script>
+  <script src="feature-toggle.js"></script>
+</body>
+</html>

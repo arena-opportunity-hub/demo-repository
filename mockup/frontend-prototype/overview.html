@@ -1,0 +1,491 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Overview — Opportunity Hub</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .ov-filter-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--c-border);
+    }
+    .ov-seg-group {
+      display: flex;
+      background: #ECEFF1;
+      border-radius: 6px;
+      padding: 2px;
+      flex: 1;
+    }
+    .ov-seg-btn {
+      flex: 1;
+      padding: 4px 0;
+      font-size: 11px;
+      font-weight: 500;
+      border: none;
+      background: transparent;
+      border-radius: 4px;
+      cursor: pointer;
+      color: #757575;
+      transition: background .12s, color .12s;
+    }
+    .ov-seg-btn.active {
+      background: #fff;
+      color: var(--c-primary);
+      font-weight: 700;
+      box-shadow: 0 1px 3px rgba(0,0,0,.10);
+    }
+    .ov-sort-sel {
+      font-size: 11px;
+      padding: 3px 5px;
+      height: 28px;
+      border: 1px solid var(--c-border);
+      border-radius: 5px;
+      background: #fff;
+      color: var(--c-text-primary);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- ── Sidebar ──────────────────────────────────────────────── -->
+  <aside class="sidebar"></aside>
+
+  <!-- ── Main (original split layout) ────────────────────────── -->
+  <main class="main-content overview">
+    <div class="overview-split">
+
+      <!-- ── Left: Opportunity List ─────────────────────────── -->
+      <div class="opp-list-panel">
+        <div class="opp-list-header">
+          <span class="opp-list-header-title">Opportunities</span>
+          <span class="opp-list-count">5</span>
+        </div>
+        <div class="opp-list-search">
+          <input type="text" id="ov-search" class="input-outlined" placeholder="Suche…" style="width:100%" />
+        </div>
+
+        <!-- Filter & Sort row -->
+        <div class="ov-filter-row">
+          <div class="ov-seg-group">
+            <button class="ov-seg-btn active" data-ov-type="">Alle</button>
+            <button class="ov-seg-btn" data-ov-type="tm">T&amp;M</button>
+            <button class="ov-seg-btn" data-ov-type="rfp">RfP</button>
+          </div>
+          <select id="ov-sort" class="ov-sort-sel" title="Sortierung">
+            <option value="date-asc">Frist ↑</option>
+            <option value="date-desc">Frist ↓</option>
+            <option value="title">A – Z</option>
+            <option value="matches">Matches ↓</option>
+          </select>
+        </div>
+
+        <div class="opp-list-item active" data-opp-id="oph-1247" data-type="tm"
+             data-date="2026-06-01" data-matches="3"
+             data-title="Backend-Projekt Datenmigration" data-client="Hypoteq AG">
+          <div class="opp-list-item-top">
+            <span class="opp-list-item-title">Backend-Projekt Datenmigration</span>
+            <span class="days-badge days-warning">10 Tage</span>
+          </div>
+          <div class="opp-list-item-client">Hypoteq AG</div>
+          <div class="opp-list-item-meta">
+            <span>01.06.2026</span>
+            <span>München / Hybrid</span>
+          </div>
+          <div class="match-counts">
+            <span class="match-count green" title="Genehmigt">1</span>
+            <span class="match-count yellow" title="In Prüfung">2</span>
+            <span class="match-count red" title="Abgelehnt">0</span>
+          </div>
+        </div>
+
+        <div class="opp-list-item" data-opp-id="oph-1248" data-type="tm"
+             data-date="2026-05-28" data-matches="3"
+             data-title="Container Plattform Initiative" data-client="Lars Gehrken">
+          <div class="opp-list-item-top">
+            <span class="opp-list-item-title">Container Plattform Initiative</span>
+            <span class="days-badge days-urgent">6 Tage</span>
+          </div>
+          <div class="opp-list-item-client">Lars Gehrken</div>
+          <div class="opp-list-item-meta">
+            <span>28.05.2026</span>
+            <span>Hamburg / Remote</span>
+          </div>
+          <div class="match-counts">
+            <span class="match-count green" title="Genehmigt">0</span>
+            <span class="match-count yellow" title="In Prüfung">3</span>
+            <span class="match-count red" title="Abgelehnt">1</span>
+          </div>
+        </div>
+
+        <div class="opp-list-item" data-opp-id="oph-1249" data-type="tm"
+             data-date="2026-06-14" data-matches="6"
+             data-title="Business Analysten IT-Consulting" data-client="IPSWAYS / Insurance">
+          <div class="opp-list-item-top">
+            <span class="opp-list-item-title">Business Analysten IT-Consulting</span>
+            <span class="days-badge days-ok">23 Tage</span>
+          </div>
+          <div class="opp-list-item-client">IPSWAYS / Insurance</div>
+          <div class="opp-list-item-meta">
+            <span>14.06.2026</span>
+            <span>Düsseldorf / Remote</span>
+          </div>
+          <div class="match-counts">
+            <span class="match-count green" title="Genehmigt">2</span>
+            <span class="match-count yellow" title="In Prüfung">4</span>
+            <span class="match-count red" title="Abgelehnt">1</span>
+          </div>
+        </div>
+
+        <div id="rfp-divider" style="padding:8px 16px 4px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--c-text-muted);border-top:1px solid var(--c-border);margin-top:4px">
+          RfP / Ausschreibungen
+        </div>
+
+        <div class="opp-list-item" data-opp-id="rfp-0031" data-type="rfp"
+             data-date="2026-06-15" data-matches="4"
+             data-title="Digital Insurance Platform" data-client="IPSWAYS / Insurance">
+          <div class="opp-list-item-top">
+            <span class="opp-list-item-title">Digital Insurance Platform</span>
+            <div style="display:flex;gap:4px;align-items:center;flex-shrink:0">
+              <span style="font-size:10px;padding:2px 7px;border-radius:12px;font-weight:700;background:#EDE7F6;color:#6A1B9A;border:1px solid #CE93D8;white-space:nowrap">RfP</span>
+              <span class="days-badge days-ok">24 Tage</span>
+            </div>
+          </div>
+          <div class="opp-list-item-client">IPSWAYS / Insurance</div>
+          <div class="opp-list-item-meta">
+            <span>Frist: 15.06.2026</span>
+            <span>Remote</span>
+          </div>
+          <div style="margin-top:6px">
+            <span style="font-size:10px;padding:2px 7px;border-radius:12px;background:#FFF3E0;color:#E65100;border:1px solid #FFCC80">Fragenphase</span>
+          </div>
+        </div>
+
+        <div class="opp-list-item" data-opp-id="rfp-0028" data-type="rfp"
+             data-date="2026-06-30" data-matches="6"
+             data-title="Cloud Transformation" data-client="Deutsche Bank">
+          <div class="opp-list-item-top">
+            <span class="opp-list-item-title">Cloud Transformation</span>
+            <div style="display:flex;gap:4px;align-items:center;flex-shrink:0">
+              <span style="font-size:10px;padding:2px 7px;border-radius:12px;font-weight:700;background:#EDE7F6;color:#6A1B9A;border:1px solid #CE93D8;white-space:nowrap">RfP</span>
+              <span class="days-badge days-ok">39 Tage</span>
+            </div>
+          </div>
+          <div class="opp-list-item-client">Deutsche Bank</div>
+          <div class="opp-list-item-meta">
+            <span>Frist: 30.06.2026</span>
+            <span>Frankfurt / Hybrid</span>
+          </div>
+          <div style="margin-top:6px">
+            <span style="font-size:10px;padding:2px 7px;border-radius:12px;background:#E3F2FD;color:#1565C0;border:1px solid #90CAF9">Qualifizierung</span>
+          </div>
+        </div>
+
+      </div><!-- /opp-list-panel -->
+
+      <!-- ── Right: Detail / Edit Panel ────────────────────── -->
+      <div class="opp-detail-panel" id="opp-detail-panel"
+           style="transition:opacity 0.18s ease"></div>
+
+    </div><!-- /overview-split -->
+  </main>
+
+</div><!-- /app-shell -->
+
+<script src="features.js"></script>
+<script src="sidebar.js"></script>
+<script src="script.js"></script>
+<script src="opp-data.js"></script>
+<script>
+var currentOppId = null;
+
+/* ── RfP Mock Data ────────────────────────────────────────────── */
+var RFP_DATA = {
+  'rfp-0031': {
+    id: 'RFP-0031', title: 'Digital Insurance Platform',
+    client: 'IPSWAYS / Insurance', created: '15.05.2026', creator: 'Anna Schmidt',
+    phase: 'Fragenphase', phaseIdx: 2,
+    meta: [
+      { label: 'Abgabefrist', value: '15.06.2026' },
+      { label: 'Volumen',     value: 'ca. 2.400 Std.' },
+      { label: 'Rollen',      value: '4 Positionen' },
+      { label: 'Standort',    value: 'Remote' },
+    ],
+    description: 'Aufbau einer modernen, cloud-nativen Versicherungsplattform auf Basis von Microservices. Ziel ist die vollständige Ablösung des Legacy-Kernsystems innerhalb von 18 Monaten.',
+    detailUrl: 'rfp-detail.html',
+  },
+  'rfp-0028': {
+    id: 'RFP-0028', title: 'Cloud Transformation',
+    client: 'Deutsche Bank', created: '08.05.2026', creator: 'Lars Gehrken',
+    phase: 'Qualifizierung', phaseIdx: 1,
+    meta: [
+      { label: 'Abgabefrist', value: '30.06.2026' },
+      { label: 'Volumen',     value: 'ca. 3.600 Std.' },
+      { label: 'Rollen',      value: '6 Positionen' },
+      { label: 'Standort',    value: 'Frankfurt / Hybrid' },
+    ],
+    description: 'Migration der bankinternen IT-Infrastruktur in eine hybride Multi-Cloud-Architektur (AWS + Azure). Fokus auf Sicherheit, Compliance und Zero-Downtime-Migration.',
+    detailUrl: 'rfp-detail.html',
+  },
+};
+
+/* ── Helpers ──────────────────────────────────────────────────── */
+var panel = document.getElementById('opp-detail-panel');
+
+function fadePanel(fn) {
+  panel.style.opacity = '0';
+  setTimeout(function() {
+    fn();
+    panel.style.opacity = '1';
+  }, 180);
+}
+
+/* ── Show Detail ──────────────────────────────────────────────── */
+function showDetail(id) {
+  currentOppId = id;
+  renderDetailContent(id, 'opp-detail-panel');
+
+  // Override "Bearbeiten": call openEdit instead of navigating
+  var editLink = panel.querySelector('.opp-detail-actions a[href*="detail.html"]');
+  if (editLink) {
+    var editBtn = document.createElement('button');
+    editBtn.className = editLink.className;
+    editBtn.textContent = 'Bearbeiten';
+    editBtn.addEventListener('click', function() { fadePanel(function(){ openEdit(id); }); });
+    editLink.replaceWith(editBtn);
+  }
+
+  // Override "Matches ansehen": add ?opp= filter param
+  var matchLink = panel.querySelector('.opp-detail-actions a[href="matches.html"]');
+  if (matchLink) matchLink.href = 'matches.html?opp=' + id;
+}
+
+/* ── Show RfP Detail ──────────────────────────────────────────── */
+function showRfpDetail(id) {
+  currentOppId = id;
+  var rfp = RFP_DATA[id];
+  if (!rfp) return;
+
+  var STAGES = ['Eingang','Qualifizierung','Fragenphase','Angebotserstellung','Pitch','Entscheidung','Learnings'];
+  var PHASE_COLORS = {
+    'Fragenphase':       { bg:'#FFF3E0', color:'#E65100', border:'#FFCC80' },
+    'Qualifizierung':    { bg:'#E3F2FD', color:'#1565C0', border:'#90CAF9' },
+    'Angebotserstellung':{ bg:'#E8EAF6', color:'#283593', border:'#9FA8DA' },
+    'Pitch':             { bg:'#F3E5F5', color:'#6A1B9A', border:'#CE93D8' },
+    'Entscheidung':      { bg:'#E8F5E9', color:'#1B5E20', border:'#A5D6A7' },
+  };
+  var pc = PHASE_COLORS[rfp.phase] || { bg:'#F5F5F5', color:'#555', border:'#CCC' };
+
+  var stepperHtml = STAGES.map(function(s, i) {
+    var state = i < rfp.phaseIdx ? 'done' : i === rfp.phaseIdx ? 'active' : 'pending';
+    var dotStyle = state === 'done'
+      ? 'background:#4CAF50;border-color:#4CAF50'
+      : state === 'active'
+      ? 'background:#1976D2;border-color:#1976D2'
+      : 'background:#fff;border-color:#BDBDBD';
+    var labelColor = state === 'pending' ? 'color:#BDBDBD' : state === 'active' ? 'color:#1976D2;font-weight:600' : 'color:#4CAF50';
+    var connector = i < STAGES.length - 1
+      ? '<div style="flex:1;height:2px;background:' + (i < rfp.phaseIdx ? '#4CAF50' : '#E0E0E0') + ';margin:0 2px;align-self:center"></div>'
+      : '';
+    return '<div style="display:flex;flex-direction:column;align-items:center;gap:4px">'
+      + '<div style="width:12px;height:12px;border-radius:50%;border:2px solid;' + dotStyle + '"></div>'
+      + '<div style="font-size:9px;text-align:center;white-space:nowrap;' + labelColor + '">' + s + '</div>'
+      + '</div>' + connector;
+  }).join('');
+
+  var metaCards = rfp.meta.map(function(m) {
+    return '<div class="detail-meta-card"><div class="meta-label">' + m.label + '</div><div class="meta-value">' + m.value + '</div></div>';
+  }).join('');
+
+  panel.innerHTML =
+    '<div class="opp-detail-header">' +
+      '<div class="opp-detail-title-block">' +
+        '<div class="opp-detail-eyebrow">' +
+          '<span style="font-size:10px;padding:2px 8px;border-radius:12px;font-weight:700;background:#EDE7F6;color:#6A1B9A;border:1px solid #CE93D8">RfP</span>' +
+          '<span class="opp-detail-id">ID: ' + rfp.id + '</span>' +
+        '</div>' +
+        '<h1>' + rfp.title + '</h1>' +
+        '<div class="opp-detail-client">' + rfp.client + '&nbsp;&middot;&nbsp;Erstellt am ' + rfp.created + '&nbsp;&middot;&nbsp;' + rfp.creator + '</div>' +
+      '</div>' +
+      '<div class="opp-detail-actions">' +
+        '<a href="' + rfp.detailUrl + '" class="btn btn-primary">Vollansicht öffnen</a>' +
+      '</div>' +
+    '</div>' +
+
+    '<div style="padding:14px 0 4px">' +
+      '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--c-text-muted);margin-bottom:10px">Pipeline</div>' +
+      '<div style="display:flex;align-items:flex-start">' + stepperHtml + '</div>' +
+      '<div style="margin-top:10px">' +
+        '<span style="font-size:11px;padding:3px 10px;border-radius:12px;font-weight:600;background:' + pc.bg + ';color:' + pc.color + ';border:1px solid ' + pc.border + '">Aktuelle Phase: ' + rfp.phase + '</span>' +
+      '</div>' +
+    '</div>' +
+
+    '<div class="detail-meta-cards" style="margin-top:16px">' + metaCards + '</div>' +
+
+    '<div class="detail-section">' +
+      '<h2 class="detail-section-title"><span class="detail-section-icon blue">ⓘ</span>Beschreibung</h2>' +
+      '<p>' + rfp.description + '</p>' +
+    '</div>';
+}
+
+/* ── Show Edit Form ───────────────────────────────────────────── */
+function openEdit(id) {
+  var opp = OPP_DATA[id];
+  if (!opp) return;
+
+  var locMeta  = (opp.meta || []).find(function(m){ return m.label === 'Ort' || m.label === 'Standort'; });
+  var startMeta = (opp.meta || []).find(function(m){ return m.label === 'Start' || m.label === 'Beginn'; });
+  var endMeta   = (opp.meta || []).find(function(m){ return m.label === 'Ende'; });
+
+  panel.innerHTML =
+    '<div style="padding:32px 40px;display:flex;flex-direction:column;gap:18px;height:100%;box-sizing:border-box;overflow-y:auto">' +
+
+    // Header
+    '<div style="display:flex;align-items:center;gap:12px;margin-bottom:4px">' +
+      '<button id="ed-back" class="btn btn-text" style="padding:0;font-size:13px">← Zurück</button>' +
+      '<div style="flex:1">' +
+        '<div style="font-size:11px;color:var(--c-text-muted);text-transform:uppercase;letter-spacing:.6px">Bearbeiten</div>' +
+        '<div style="font-weight:700;font-size:17px;margin-top:2px">' + opp.title + '</div>' +
+      '</div>' +
+    '</div>' +
+
+    // Form grid
+    '<div class="form-field"><label>Titel <span class="required">*</span></label>' +
+      '<input id="ed-f-title" type="text" class="input-outlined" value="' + escapeAttr(opp.title) + '" /></div>' +
+
+    '<div class="form-grid">' +
+      '<div class="form-field"><label>Kunde / Projekt</label>' +
+        '<input id="ed-f-client" type="text" class="input-outlined" value="' + escapeAttr(opp.client) + '" /></div>' +
+      '<div class="form-field"><label>Status</label>' +
+        '<select id="ed-f-status" class="input-outlined">' +
+          ['Offen','In Prüfung','Genehmigt','Abgeschlossen','Entwurf'].map(function(s){
+            return '<option' + (opp.status.label === s ? ' selected' : '') + '>' + s + '</option>';
+          }).join('') +
+        '</select></div>' +
+    '</div>' +
+
+    '<div class="form-grid form-grid-3">' +
+      '<div class="form-field"><label>Start</label>' +
+        '<input type="text" class="input-outlined" value="' + escapeAttr((startMeta || {}).value || '') + '" /></div>' +
+      '<div class="form-field"><label>Ende</label>' +
+        '<input type="text" class="input-outlined" value="' + escapeAttr((endMeta || {}).value || '') + '" /></div>' +
+      '<div class="form-field"><label>Ort / Modus</label>' +
+        '<input type="text" class="input-outlined" value="' + escapeAttr((locMeta || {}).value || '') + '" /></div>' +
+    '</div>' +
+
+    '<div class="form-field"><label>Beschreibung</label>' +
+      '<textarea id="ed-f-desc" class="input-outlined" rows="4">' + escapeHtml(opp.description || '') + '</textarea></div>' +
+
+    '<div class="form-field"><label>Aufgaben <span style="font-size:11px;font-weight:400;color:var(--c-text-muted)">(eine pro Zeile)</span></label>' +
+      '<textarea id="ed-f-tasks" class="input-outlined" rows="4">' + escapeHtml(opp.tasks ? opp.tasks.join('\n') : '') + '</textarea></div>' +
+
+    '<div class="form-field"><label>Skills <span style="font-size:11px;font-weight:400;color:var(--c-text-muted)">(kommagetrennt)</span></label>' +
+      '<input type="text" class="input-outlined" value="' + escapeAttr(opp.skills ? opp.skills.join(', ') : '') + '" /></div>' +
+
+    '<div class="form-field"><label>Links &amp; Anhänge</label>' +
+      '<input type="text" class="input-outlined" placeholder="https:// oder SharePoint-Link" /></div>' +
+
+    // Actions
+    '<div style="display:flex;gap:10px;padding-top:4px;border-top:1px solid var(--c-border);margin-top:auto">' +
+      '<button id="ed-save" class="btn btn-primary">Änderungen speichern</button>' +
+      '<button id="ed-cancel" class="btn btn-text">Abbrechen</button>' +
+    '</div>' +
+
+    '</div>';
+
+  document.getElementById('ed-back').addEventListener('click', function(){ fadePanel(function(){ showDetail(id); }); });
+  document.getElementById('ed-cancel').addEventListener('click', function(){ fadePanel(function(){ showDetail(id); }); });
+  document.getElementById('ed-save').addEventListener('click', function() {
+    var t = document.getElementById('ed-f-title').value.trim();
+    if (!t) { alert('Titel ist ein Pflichtfeld.'); return; }
+    showSnackbar('Änderungen gespeichert.');
+    fadePanel(function(){ showDetail(id); });
+  });
+}
+
+/* ── List item clicks ─────────────────────────────────────────── */
+document.querySelectorAll('.opp-list-item[data-opp-id]').forEach(function(item) {
+  item.addEventListener('click', function() {
+    document.querySelectorAll('.opp-list-item').forEach(function(i){ i.classList.remove('active'); });
+    item.classList.add('active');
+    var fn = item.dataset.type === 'rfp'
+      ? function(){ showRfpDetail(item.dataset.oppId); }
+      : function(){ showDetail(item.dataset.oppId); };
+    fadePanel(fn);
+  });
+});
+
+/* ── Filter / Sort ────────────────────────────────────────────── */
+var ovFilterType = '';
+var ovSortKey    = 'date-asc';
+
+function applyOvFilter() {
+  var q      = (document.getElementById('ov-search').value || '').toLowerCase().trim();
+  var listPanel = document.querySelector('.opp-list-panel');
+  var rfpDiv = document.getElementById('rfp-divider');
+  var items  = Array.from(document.querySelectorAll('.opp-list-item[data-opp-id]'));
+
+  var tmItems  = items.filter(function(i){ return i.dataset.type === 'tm';  });
+  var rfpItems = items.filter(function(i){ return i.dataset.type === 'rfp'; });
+
+  function sortFn(a, b) {
+    if (ovSortKey === 'date-asc')  return (a.dataset.date  || '').localeCompare(b.dataset.date  || '');
+    if (ovSortKey === 'date-desc') return (b.dataset.date  || '').localeCompare(a.dataset.date  || '');
+    if (ovSortKey === 'title')     return (a.dataset.title || '').localeCompare(b.dataset.title || '', 'de');
+    if (ovSortKey === 'matches')   return (+b.dataset.matches || 0) - (+a.dataset.matches || 0);
+    return 0;
+  }
+
+  tmItems.slice().sort(sortFn).forEach(function(item) { listPanel.insertBefore(item, rfpDiv); });
+  rfpItems.slice().sort(sortFn).forEach(function(item) { listPanel.appendChild(item); });
+
+  var showTm  = ovFilterType === '' || ovFilterType === 'tm';
+  var rfpFeatureOn = !window.OHFeatures || OHFeatures.feat('rfpItems');
+  var showRfp = (ovFilterType === '' || ovFilterType === 'rfp') && rfpFeatureOn;
+
+  function setVisible(item, groupVisible) {
+    var searchOk = !q ||
+      (item.dataset.title  || '').toLowerCase().includes(q) ||
+      (item.dataset.client || '').toLowerCase().includes(q);
+    item.style.display = (groupVisible && searchOk) ? '' : 'none';
+  }
+
+  tmItems.forEach(function(i){  setVisible(i, showTm);  });
+  rfpItems.forEach(function(i){ setVisible(i, showRfp); });
+
+  if (rfpDiv) rfpDiv.style.display = (ovFilterType === '' || ovFilterType === 'rfp') ? '' : 'none';
+
+  var visible = items.filter(function(i){ return i.style.display !== 'none'; }).length;
+  var countEl = document.querySelector('.opp-list-count');
+  if (countEl) countEl.textContent = visible;
+}
+
+document.getElementById('ov-search').addEventListener('input', applyOvFilter);
+
+document.getElementById('ov-sort').addEventListener('change', function() {
+  ovSortKey = this.value;
+  applyOvFilter();
+});
+
+document.querySelectorAll('.ov-seg-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.ov-seg-btn').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    ovFilterType = btn.dataset.ovType;
+    applyOvFilter();
+  });
+});
+
+/* ── Init: show first item ────────────────────────────────────── */
+applyOvFilter();
+showDetail('oph-1247');
+</script>
+  <script src="feature-toggle.js"></script>
+</body>
+</html>

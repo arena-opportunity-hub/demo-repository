@@ -1,0 +1,232 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meine Opportunities — Opportunity Hub</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- ── Sidebar ──────────────────────────────────────────────── -->
+  <aside class="sidebar"></aside>
+
+  <!-- ── Main ─────────────────────────────────────────────────── -->
+  <main class="main-content">
+
+    <header class="page-header">
+      <h1>Meine Opportunities</h1>
+      <a href="new-opportunity.html" class="btn btn-primary">+ Neue Opportunity</a>
+    </header>
+
+    <div class="page-content">
+
+      <!-- Favorites Section (shown only when items are saved) -->
+      <div id="fav-section" style="display:none;margin-bottom:28px">
+        <div class="fav-section-header">&#9733; Gespeicherte Opportunities</div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Titel</th>
+              <th>Kunde</th>
+              <th>Abzugeben bis</th>
+              <th>Frist</th>
+              <th>Skills</th>
+              <th>Matches</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="fav-tbody"></tbody>
+        </table>
+      </div>
+
+      <!-- Filter Bar -->
+      <div class="filter-bar">
+        <div class="filter-group">
+          <label for="filter-status">Status</label>
+          <select id="filter-status" class="input-outlined">
+            <option value="">Alle</option>
+            <option>Offen</option>
+            <option>In Prüfung</option>
+            <option>Genehmigt</option>
+            <option>Abgeschlossen</option>
+            <option>Entwurf</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="filter-search">Suche</label>
+          <input id="filter-search" type="text" class="input-outlined" placeholder="Titel oder Kunde" />
+        </div>
+      </div>
+
+      <!-- Main Table -->
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Titel</th>
+            <th>Kunde</th>
+            <th>Abzugeben bis</th>
+            <th>Frist</th>
+            <th>Skills</th>
+            <th>Matches</th>
+            <th>Status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="opp-tbody"></tbody>
+      </table>
+
+      <!-- Pagination -->
+      <div class="pagination">
+        <span>Rows per page: 10</span>
+        <span id="pg-info"></span>
+      </div>
+
+    </div><!-- /page-content -->
+  </main>
+
+</div><!-- /app-shell -->
+
+<script src="features.js"></script>
+<script src="sidebar.js"></script>
+<script src="script.js"></script>
+<script>
+const OPP_LIST = [
+  {
+    id: 'oph-1247',
+    title: 'Backend-Projekt Datenmigration',
+    creator: 'Jannik Schröder',
+    client: 'Hypoteq AG',
+    deadline: '2026-05-26',
+    deadlineDisplay: '26.05.2026',
+    skills: ['Java', 'AWS', '+2'],
+    matches: 12,
+    status: 'Offen',
+    statusCls: 'pill-open'
+  },
+  {
+    id: 'oph-1248',
+    title: 'Container Plattform Initiative',
+    creator: 'Lars Gehrken',
+    client: 'Lars Gehrken',
+    deadline: '2026-05-28',
+    deadlineDisplay: '28.05.2026',
+    skills: ['Docker', 'Kubernetes', '+3'],
+    matches: 5,
+    status: 'In Prüfung',
+    statusCls: 'pill-review'
+  },
+  {
+    id: 'oph-1249',
+    title: 'Business Analysten IT-Consulting',
+    creator: 'IPSWAYS / Insurance',
+    client: 'IPSWAYS / Insurance',
+    deadline: '2026-06-14',
+    deadlineDisplay: '14.06.2026',
+    skills: ['Business Analysis', 'Scrum', '+3'],
+    matches: 7,
+    status: 'Offen',
+    statusCls: 'pill-open'
+  }
+];
+
+const SAVED_KEY = 'savedOpps';
+function getSaved() { try { return JSON.parse(localStorage.getItem(SAVED_KEY)) || []; } catch { return []; } }
+function setSaved(arr) { localStorage.setItem(SAVED_KEY, JSON.stringify(arr)); }
+
+function daysBadge(isoDeadline) {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const due   = new Date(isoDeadline); due.setHours(0,0,0,0);
+  const days  = Math.ceil((due - today) / 86400000);
+  if (days < 0)   return '<span class="days-badge days-expired">Abgelaufen</span>';
+  if (days <= 7)  return '<span class="days-badge days-urgent">'  + days + ' Tage</span>';
+  if (days <= 14) return '<span class="days-badge days-warning">' + days + ' Tage</span>';
+  return '<span class="days-badge days-ok">' + days + ' Tage</span>';
+}
+
+function buildRow(opp) {
+  const saved   = getSaved();
+  const isSaved = saved.includes(opp.id);
+  const star    = isSaved ? '&#9733;' : '&#9734;';
+  const chips   = opp.skills.map(function(s){ return '<span class="chip">' + s + '</span>'; }).join('');
+  return '<tr data-status="' + opp.status + '" onclick="location.href=\'detail.html?id=' + opp.id + '\'" style="cursor:pointer">' +
+    '<td>' +
+      '<div class="row-title">' + opp.title + '</div>' +
+      '<div class="row-creator">' + opp.creator + '</div>' +
+    '</td>' +
+    '<td>' + opp.client + '</td>' +
+    '<td>' + opp.deadlineDisplay + '</td>' +
+    '<td>' + daysBadge(opp.deadline) + '</td>' +
+    '<td>' + chips + '</td>' +
+    '<td>' + opp.matches + '</td>' +
+    '<td><span class="pill ' + opp.statusCls + '">' + opp.status + '</span></td>' +
+    '<td><div style="display:flex;align-items:center;gap:6px;justify-content:flex-end">' +
+      '<button class="bookmark-btn' + (isSaved ? ' saved' : '') + '" data-opp-id="' + opp.id + '" ' +
+        'onclick="event.stopPropagation();toggleBookmark(this)" title="Speichern">' + star + '</button>' +
+      '<a href="detail.html?id=' + opp.id + '" class="btn btn-outlined btn-sm" onclick="event.stopPropagation()">Details</a>' +
+    '</div></td>' +
+  '</tr>';
+}
+
+function renderAll() {
+  var query  = (document.getElementById('filter-search') ? document.getElementById('filter-search').value : '').toLowerCase().trim();
+  var status = document.getElementById('filter-status') ? document.getElementById('filter-status').value : '';
+  var saved  = getSaved();
+
+  // Favorites section
+  var favSection = document.getElementById('fav-section');
+  var favTbody   = document.getElementById('fav-tbody');
+  var favOpps    = OPP_LIST.filter(function(o){ return saved.includes(o.id); });
+  if (favOpps.length > 0) {
+    favSection.style.display = '';
+    favTbody.innerHTML = favOpps.map(buildRow).join('');
+  } else {
+    favSection.style.display = 'none';
+    favTbody.innerHTML = '';
+  }
+
+  // Main table with filters
+  var tbody = document.getElementById('opp-tbody');
+  var visible = 0;
+  var html = '';
+  OPP_LIST.forEach(function(opp) {
+    if (saved.includes(opp.id)) return; // already shown in favorites above
+    var textMatch   = !query  || opp.title.toLowerCase().includes(query) || opp.client.toLowerCase().includes(query);
+    var statusMatch = !status || opp.status === status;
+    if (textMatch && statusMatch) { visible++; html += buildRow(opp); }
+  });
+
+  if (visible === 0) {
+    html = '<tr><td colspan="8"><div class="empty-state">' +
+      '<div class="empty-state-icon">○</div>' +
+      '<div class="empty-state-title">Keine Opportunities gefunden</div>' +
+      '<div class="empty-state-sub">Versuche einen anderen Suchbegriff oder Filter.</div>' +
+      '</div></td></tr>';
+  }
+  tbody.innerHTML = html;
+
+  var pg = document.getElementById('pg-info');
+  if (pg) pg.textContent = (visible > 0 ? '1–' + visible : '0') + ' von ' + OPP_LIST.length;
+}
+
+function toggleBookmark(btn) {
+  var id    = btn.dataset.oppId;
+  var saved = getSaved();
+  var idx   = saved.indexOf(id);
+  if (idx >= 0) { saved.splice(idx, 1); showSnackbar('Gespeichert entfernt.'); }
+  else          { saved.push(id);       showSnackbar('Opportunity gespeichert.'); }
+  setSaved(saved);
+  renderAll();
+}
+window.toggleBookmark = toggleBookmark;
+
+document.getElementById('filter-search') && document.getElementById('filter-search').addEventListener('input',  renderAll);
+document.getElementById('filter-status') && document.getElementById('filter-status').addEventListener('change', renderAll);
+
+renderAll();
+</script>
+  <script src="feature-toggle.js"></script>
+</body>
+</html>

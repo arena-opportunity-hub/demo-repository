@@ -1,0 +1,899 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Matches — Opportunity Hub</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- ── Sidebar ──────────────────────────────────────────────── -->
+  <aside class="sidebar"></aside>
+
+  <!-- ── Main ─────────────────────────────────────────────────── -->
+  <main class="main-content">
+
+    <header class="page-header">
+      <div>
+        <h1>Matches</h1>
+        <div style="font-size:13px;color:var(--c-text-muted);margin-top:2px">
+          Zu bewertende Kandidaten — gruppiert nach Führungskraft
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="text-align:right">
+          <div style="font-size:13px;font-weight:600;color:var(--c-text-primary)">Aileen Match</div>
+          <div style="font-size:11px;color:var(--c-text-muted)">BU Manager</div>
+        </div>
+        <div class="avatar" style="background:#1976D2;width:38px;height:38px;font-size:14px;flex-shrink:0">AM</div>
+      </div>
+    </header>
+
+    <div class="page-content">
+
+      <!-- Top-level tabs: TM vs RfP -->
+      <div class="tabs" style="margin-bottom:20px">
+        <button class="tab-btn active" data-tab="matches-tm">T&amp;M Projekte</button>
+        <button class="tab-btn" data-tab="matches-rfp">RfP / Ausschreibungen <span class="nav-badge" style="background:#7B1FA2;color:#fff">2</span></button>
+      </div>
+
+      <!-- ══ TM Tab ══════════════════════════════════════════════ -->
+      <div class="tab-panel active" id="tab-matches-tm">
+
+      <!-- Filter Bar -->
+      <div class="filter-bar" style="margin-bottom:24px">
+        <div class="filter-group">
+          <label for="f-manager">Führungskraft</label>
+          <select id="f-manager" class="input-outlined">
+            <option value="">Alle</option>
+            <option value="anna-schmidt" selected>Mein Team (Anna Schmidt)</option>
+            <option value="klaus-bauer">Klaus Bauer</option>
+            <option value="marco-lehmann">Marco Lehmann</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="f-opp">Opportunity</label>
+          <select id="f-opp" class="input-outlined">
+            <option value="">Alle</option>
+            <option value="oph-1247">Backend-Projekt Datenmigration</option>
+            <option value="oph-1248">Container Plattform Initiative</option>
+            <option value="oph-1249">Business Analysten IT-Consulting</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="f-status">Status</label>
+          <select id="f-status" class="input-outlined">
+            <option value="">Alle</option>
+            <option value="open">Offen</option>
+            <option value="review">In Prüfung</option>
+            <option value="approved">Genehmigt</option>
+            <option value="rejected">Abgelehnt</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- ── Gruppe: Anna Schmidt (Mein Team) ─────────────────── -->
+      <div class="manager-group" data-manager-key="anna-schmidt">
+        <div class="manager-group-header">
+          <div class="manager-avatar" style="background:#1976D2">AS</div>
+          <div>
+            <span class="manager-name">Anna Schmidt</span>
+            <span class="manager-count">5 Mitarbeitende</span>
+          </div>
+          <span class="manager-mine-badge">Mein Team</span>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th style="width:36px"><input type="checkbox" aria-label="Alle auswählen" /></th>
+              <th>Mitarbeiter</th>
+              <th>Opportunity</th>
+              <th>Score</th>
+              <th>Status</th>
+              <th>Aktionen</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-opportunity="oph-1247" data-status="approved" data-candidate="MM" data-score="91">
+              <td><input type="checkbox" /></td>
+              <td>
+                <div style="display:flex;align-items:center;gap:10px">
+                  <div class="avatar" style="background:#1976D2;width:34px;height:34px;font-size:13px">MM</div>
+                  <div>
+                    <div class="candidate-name">Max Mustermann</div>
+                    <div class="candidate-role">Senior Consultant</div>
+                  </div>
+                </div>
+              </td>
+              <td style="font-size:13px">Backend-Projekt Datenmigration</td>
+              <td>
+                <div class="score-col" style="min-width:120px">
+                  <div class="score-bar-track"><div class="score-bar-fill high" style="width:91%"></div></div>
+                  <span class="score-number">91</span>
+                </div>
+              </td>
+              <td><span class="pill pill-approved">Genehmigt</span></td>
+              <td>
+                <div style="display:flex;gap:6px;align-items:center">
+                  <button class="btn btn-outlined btn-sm details-btn">Details</button>
+                  <div class="action-dropdown">
+                    <button class="action-dropdown-btn" type="button">Aktion ▾</button>
+                    <div class="action-dropdown-menu">
+                      <div class="action-dropdown-item approve-item">✓ Genehmigen</div>
+                      <div class="action-dropdown-item review-item">◷ In Prüfung</div>
+                      <div class="action-dropdown-item reject-item">✗ Ablehnen</div>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr data-opportunity="oph-1247" data-status="review" data-candidate="SK" data-score="84">
+              <td><input type="checkbox" /></td>
+              <td>
+                <div style="display:flex;align-items:center;gap:10px">
+                  <div class="avatar" style="background:#388E3C;width:34px;height:34px;font-size:13px">SK</div>
+                  <div>
+                    <div class="candidate-name">Sandra Koch</div>
+                    <div class="candidate-role">Consultant</div>
+                  </div>
+                </div>
+              </td>
+              <td style="font-size:13px">Backend-Projekt Datenmigration</td>
+              <td>
+                <div class="score-col" style="min-width:120px">
+                  <div class="score-bar-track"><div class="score-bar-fill high" style="width:84%"></div></div>
+                  <span class="score-number">84</span>
+                </div>
+              </td>
+              <td><span class="pill pill-review">In Prüfung</span></td>
+              <td>
+                <div style="display:flex;gap:6px;align-items:center">
+                  <button class="btn btn-outlined btn-sm details-btn">Details</button>
+                  <div class="action-dropdown">
+                    <button class="action-dropdown-btn" type="button">Aktion ▾</button>
+                    <div class="action-dropdown-menu">
+                      <div class="action-dropdown-item approve-item">✓ Genehmigen</div>
+                      <div class="action-dropdown-item review-item">◷ In Prüfung</div>
+                      <div class="action-dropdown-item reject-item">✗ Ablehnen</div>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr data-opportunity="oph-1247" data-status="open" data-candidate="FW" data-score="69">
+              <td><input type="checkbox" /></td>
+              <td>
+                <div style="display:flex;align-items:center;gap:10px">
+                  <div class="avatar" style="background:#F57C00;width:34px;height:34px;font-size:13px">FW</div>
+                  <div>
+                    <div class="candidate-name">Felix Weber</div>
+                    <div class="candidate-role">Consultant</div>
+                  </div>
+                </div>
+              </td>
+              <td style="font-size:13px">Backend-Projekt Datenmigration</td>
+              <td>
+                <div class="score-col" style="min-width:120px">
+                  <div class="score-bar-track"><div class="score-bar-fill medium" style="width:69%"></div></div>
+                  <span class="score-number">69</span>
+                </div>
+              </td>
+              <td><span class="pill pill-neutral">Offen</span></td>
+              <td>
+                <div style="display:flex;gap:6px;align-items:center">
+                  <button class="btn btn-outlined btn-sm details-btn">Details</button>
+                  <div class="action-dropdown">
+                    <button class="action-dropdown-btn" type="button">Aktion ▾</button>
+                    <div class="action-dropdown-menu">
+                      <div class="action-dropdown-item approve-item">✓ Genehmigen</div>
+                      <div class="action-dropdown-item review-item">◷ In Prüfung</div>
+                      <div class="action-dropdown-item reject-item">✗ Ablehnen</div>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr data-opportunity="oph-1249" data-status="open" data-candidate="AW" data-score="95">
+              <td><input type="checkbox" /></td>
+              <td>
+                <div style="display:flex;align-items:center;gap:10px">
+                  <div class="avatar" style="background:#006064;width:34px;height:34px;font-size:13px">AW</div>
+                  <div>
+                    <div class="candidate-name">Anna Weber</div>
+                    <div class="candidate-role">Senior Business Analyst</div>
+                  </div>
+                </div>
+              </td>
+              <td style="font-size:13px">Business Analysten IT-Consulting</td>
+              <td>
+                <div class="score-col" style="min-width:120px">
+                  <div class="score-bar-track"><div class="score-bar-fill high" style="width:95%"></div></div>
+                  <span class="score-number">95</span>
+                </div>
+              </td>
+              <td><span class="pill pill-neutral">Offen</span></td>
+              <td>
+                <div style="display:flex;gap:6px;align-items:center">
+                  <button class="btn btn-outlined btn-sm details-btn">Details</button>
+                  <div class="action-dropdown">
+                    <button class="action-dropdown-btn" type="button">Aktion ▾</button>
+                    <div class="action-dropdown-menu">
+                      <div class="action-dropdown-item approve-item">✓ Genehmigen</div>
+                      <div class="action-dropdown-item review-item">◷ In Prüfung</div>
+                      <div class="action-dropdown-item reject-item">✗ Ablehnen</div>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr data-opportunity="oph-1247" data-status="open" data-candidate="DK" data-score="83">
+              <td><input type="checkbox" /></td>
+              <td>
+                <div style="display:flex;align-items:center;gap:10px">
+                  <div class="avatar" style="background:#37474F;width:34px;height:34px;font-size:13px">DK</div>
+                  <div>
+                    <div class="candidate-name">David Klein</div>
+                    <div class="candidate-role">Backend Developer</div>
+                  </div>
+                </div>
+              </td>
+              <td style="font-size:13px">Backend-Projekt Datenmigration</td>
+              <td>
+                <div class="score-col" style="min-width:120px">
+                  <div class="score-bar-track"><div class="score-bar-fill high" style="width:83%"></div></div>
+                  <span class="score-number">83</span>
+                </div>
+              </td>
+              <td><span class="pill pill-neutral">Offen</span></td>
+              <td>
+                <div style="display:flex;gap:6px;align-items:center">
+                  <button class="btn btn-outlined btn-sm details-btn">Details</button>
+                  <div class="action-dropdown">
+                    <button class="action-dropdown-btn" type="button">Aktion ▾</button>
+                    <div class="action-dropdown-menu">
+                      <div class="action-dropdown-item approve-item">✓ Genehmigen</div>
+                      <div class="action-dropdown-item review-item">◷ In Prüfung</div>
+                      <div class="action-dropdown-item reject-item">✗ Ablehnen</div>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr class="empty-state-row" style="display:none">
+              <td colspan="6">
+                <div class="empty-state">
+                  <div class="empty-state-icon">○</div>
+                  <div class="empty-state-title">Keine Matches gefunden</div>
+                  <div class="empty-state-sub">Versuche andere Filtereinstellungen.</div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ── Gruppe: Klaus Bauer ───────────────────────────────── -->
+      <div class="manager-group" data-manager-key="klaus-bauer" data-locked="true">
+        <div class="manager-group-header">
+          <div class="manager-avatar" style="background:#795548">KB</div>
+          <div>
+            <span class="manager-name">Klaus Bauer</span>
+            <span class="manager-count">3 Mitarbeitende</span>
+          </div>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th style="width:36px"><input type="checkbox" aria-label="Alle auswählen" /></th>
+              <th>Mitarbeiter</th>
+              <th>Opportunity</th>
+              <th>Score</th>
+              <th>Status</th>
+              <th>Aktionen</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-opportunity="oph-1247" data-status="review" data-candidate="TB" data-score="78">
+              <td><input type="checkbox" /></td>
+              <td>
+                <div style="display:flex;align-items:center;gap:10px">
+                  <div class="avatar" style="background:#7B1FA2;width:34px;height:34px;font-size:13px">TB</div>
+                  <div>
+                    <div class="candidate-name">Thomas Berger</div>
+                    <div class="candidate-role">Senior Consultant</div>
+                  </div>
+                </div>
+              </td>
+              <td style="font-size:13px">Backend-Projekt Datenmigration</td>
+              <td>
+                <div class="score-col" style="min-width:120px">
+                  <div class="score-bar-track"><div class="score-bar-fill medium" style="width:78%"></div></div>
+                  <span class="score-number">78</span>
+                </div>
+              </td>
+              <td><span class="pill pill-review">In Prüfung</span></td>
+              <td>
+                <div style="display:flex;gap:6px;align-items:center">
+                  <button class="btn btn-outlined btn-sm details-btn">Details</button>
+                  <div class="action-dropdown">
+                    <button class="action-dropdown-btn" type="button">Aktion ▾</button>
+                    <div class="action-dropdown-menu">
+                      <div class="action-dropdown-item approve-item">✓ Genehmigen</div>
+                      <div class="action-dropdown-item review-item">◷ In Prüfung</div>
+                      <div class="action-dropdown-item reject-item">✗ Ablehnen</div>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr data-opportunity="oph-1247" data-status="open" data-candidate="JR" data-score="61">
+              <td><input type="checkbox" /></td>
+              <td>
+                <div style="display:flex;align-items:center;gap:10px">
+                  <div class="avatar" style="background:#E53935;width:34px;height:34px;font-size:13px">JR</div>
+                  <div>
+                    <div class="candidate-name">Jana Richter</div>
+                    <div class="candidate-role">Consultant</div>
+                  </div>
+                </div>
+              </td>
+              <td style="font-size:13px">Backend-Projekt Datenmigration</td>
+              <td>
+                <div class="score-col" style="min-width:120px">
+                  <div class="score-bar-track"><div class="score-bar-fill low" style="width:61%"></div></div>
+                  <span class="score-number">61</span>
+                </div>
+              </td>
+              <td><span class="pill pill-neutral">Offen</span></td>
+              <td>
+                <div style="display:flex;gap:6px;align-items:center">
+                  <button class="btn btn-outlined btn-sm details-btn">Details</button>
+                  <div class="action-dropdown">
+                    <button class="action-dropdown-btn" type="button">Aktion ▾</button>
+                    <div class="action-dropdown-menu">
+                      <div class="action-dropdown-item approve-item">✓ Genehmigen</div>
+                      <div class="action-dropdown-item review-item">◷ In Prüfung</div>
+                      <div class="action-dropdown-item reject-item">✗ Ablehnen</div>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr data-opportunity="oph-1248" data-status="open" data-candidate="MF" data-score="88">
+              <td><input type="checkbox" /></td>
+              <td>
+                <div style="display:flex;align-items:center;gap:10px">
+                  <div class="avatar" style="background:#1B5E20;width:34px;height:34px;font-size:13px">MF</div>
+                  <div>
+                    <div class="candidate-name">Michael Fischer</div>
+                    <div class="candidate-role">DevOps Engineer</div>
+                  </div>
+                </div>
+              </td>
+              <td style="font-size:13px">Container Plattform Initiative</td>
+              <td>
+                <div class="score-col" style="min-width:120px">
+                  <div class="score-bar-track"><div class="score-bar-fill high" style="width:88%"></div></div>
+                  <span class="score-number">88</span>
+                </div>
+              </td>
+              <td><span class="pill pill-neutral">Offen</span></td>
+              <td>
+                <div style="display:flex;gap:6px;align-items:center">
+                  <button class="btn btn-outlined btn-sm details-btn">Details</button>
+                  <div class="action-dropdown">
+                    <button class="action-dropdown-btn" type="button">Aktion ▾</button>
+                    <div class="action-dropdown-menu">
+                      <div class="action-dropdown-item approve-item">✓ Genehmigen</div>
+                      <div class="action-dropdown-item review-item">◷ In Prüfung</div>
+                      <div class="action-dropdown-item reject-item">✗ Ablehnen</div>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr class="empty-state-row" style="display:none">
+              <td colspan="6">
+                <div class="empty-state">
+                  <div class="empty-state-icon">○</div>
+                  <div class="empty-state-title">Keine Matches gefunden</div>
+                  <div class="empty-state-sub">Versuche andere Filtereinstellungen.</div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ── Gruppe: Marco Lehmann ─────────────────────────────── -->
+      <div class="manager-group" data-manager-key="marco-lehmann" data-locked="true">
+        <div class="manager-group-header">
+          <div class="manager-avatar" style="background:#546E7A">ML</div>
+          <div>
+            <span class="manager-name">Marco Lehmann</span>
+            <span class="manager-count">2 Mitarbeitende</span>
+          </div>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th style="width:36px"><input type="checkbox" aria-label="Alle auswählen" /></th>
+              <th>Mitarbeiter</th>
+              <th>Opportunity</th>
+              <th>Score</th>
+              <th>Status</th>
+              <th>Aktionen</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-opportunity="oph-1247" data-status="open" data-candidate="LM" data-score="74">
+              <td><input type="checkbox" /></td>
+              <td>
+                <div style="display:flex;align-items:center;gap:10px">
+                  <div class="avatar" style="background:#0097A7;width:34px;height:34px;font-size:13px">LM</div>
+                  <div>
+                    <div class="candidate-name">Lisa Müller</div>
+                    <div class="candidate-role">Principal Consultant</div>
+                  </div>
+                </div>
+              </td>
+              <td style="font-size:13px">Backend-Projekt Datenmigration</td>
+              <td>
+                <div class="score-col" style="min-width:120px">
+                  <div class="score-bar-track"><div class="score-bar-fill medium" style="width:74%"></div></div>
+                  <span class="score-number">74</span>
+                </div>
+              </td>
+              <td><span class="pill pill-neutral">Offen</span></td>
+              <td>
+                <div style="display:flex;gap:6px;align-items:center">
+                  <button class="btn btn-outlined btn-sm details-btn">Details</button>
+                  <div class="action-dropdown">
+                    <button class="action-dropdown-btn" type="button">Aktion ▾</button>
+                    <div class="action-dropdown-menu">
+                      <div class="action-dropdown-item approve-item">✓ Genehmigen</div>
+                      <div class="action-dropdown-item review-item">◷ In Prüfung</div>
+                      <div class="action-dropdown-item reject-item">✗ Ablehnen</div>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr data-opportunity="oph-1249" data-status="open" data-candidate="SB" data-score="71">
+              <td><input type="checkbox" /></td>
+              <td>
+                <div style="display:flex;align-items:center;gap:10px">
+                  <div class="avatar" style="background:#880E4F;width:34px;height:34px;font-size:13px">SB</div>
+                  <div>
+                    <div class="candidate-name">Sophie Braun</div>
+                    <div class="candidate-role">Scrum Master</div>
+                  </div>
+                </div>
+              </td>
+              <td style="font-size:13px">Business Analysten IT-Consulting</td>
+              <td>
+                <div class="score-col" style="min-width:120px">
+                  <div class="score-bar-track"><div class="score-bar-fill medium" style="width:71%"></div></div>
+                  <span class="score-number">71</span>
+                </div>
+              </td>
+              <td><span class="pill pill-neutral">Offen</span></td>
+              <td>
+                <div style="display:flex;gap:6px;align-items:center">
+                  <button class="btn btn-outlined btn-sm details-btn">Details</button>
+                  <div class="action-dropdown">
+                    <button class="action-dropdown-btn" type="button">Aktion ▾</button>
+                    <div class="action-dropdown-menu">
+                      <div class="action-dropdown-item approve-item">✓ Genehmigen</div>
+                      <div class="action-dropdown-item review-item">◷ In Prüfung</div>
+                      <div class="action-dropdown-item reject-item">✗ Ablehnen</div>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr class="empty-state-row" style="display:none">
+              <td colspan="6">
+                <div class="empty-state">
+                  <div class="empty-state-icon">○</div>
+                  <div class="empty-state-title">Keine Matches gefunden</div>
+                  <div class="empty-state-sub">Versuche andere Filtereinstellungen.</div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      </div><!-- /tab-matches-tm -->
+
+      <!-- ══ RfP Tab ═════════════════════════════════════════════ -->
+      <div class="tab-panel" id="tab-matches-rfp">
+
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px">
+          <div style="font-size:13px;color:var(--c-text-muted)">Aktive RfP-Prozesse — klicke auf einen RfP um den Prozess zu öffnen</div>
+          <a href="new-opportunity.html" class="btn btn-primary btn-sm">+ Neuer RfP</a>
+        </div>
+
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Titel</th>
+              <th>Kunde</th>
+              <th>Abgabefrist</th>
+              <th>Phase</th>
+              <th>Rollen</th>
+              <th>Erstellt von</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="cursor:pointer" onclick="location.href='rfp-detail.html'">
+              <td>
+                <div style="font-weight:500">Digital Insurance Platform</div>
+                <div style="font-size:12px;color:var(--c-text-muted)">ID: RFP-0031</div>
+              </td>
+              <td style="font-size:13px">IPSWAYS / Insurance</td>
+              <td>
+                <div style="font-size:13px">15.07.2026</div>
+                <span class="days-badge days-ok">55 Tage</span>
+              </td>
+              <td>
+                <span style="display:inline-block;padding:2px 10px;border-radius:10px;font-size:12px;font-weight:600;background:#E3F0FC;color:#1256A0">Fragenphase</span>
+              </td>
+              <td>
+                <div style="font-size:13px">4 Rollen</div>
+                <div style="font-size:12px;color:#4CAF50">3 besetzt</div>
+              </td>
+              <td style="font-size:13px;color:var(--c-text-muted)">Anna Schmidt</td>
+              <td>
+                <div style="display:flex;gap:6px;justify-content:flex-end">
+                  <a href="rfp-detail.html" class="btn btn-outlined btn-sm" onclick="event.stopPropagation()">Öffnen</a>
+                </div>
+              </td>
+            </tr>
+            <tr style="cursor:pointer" onclick="location.href='rfp-detail.html'">
+              <td>
+                <div style="font-weight:500">Cloud Transformation Initiative</div>
+                <div style="font-size:12px;color:var(--c-text-muted)">ID: RFP-0029</div>
+              </td>
+              <td style="font-size:13px">TechCorp AG</td>
+              <td>
+                <div style="font-size:13px">01.08.2026</div>
+                <span class="days-badge days-ok">72 Tage</span>
+              </td>
+              <td>
+                <span style="display:inline-block;padding:2px 10px;border-radius:10px;font-size:12px;font-weight:600;background:#FFF9C4;color:#795548">Qualifizierung</span>
+              </td>
+              <td>
+                <div style="font-size:13px">3 Rollen</div>
+                <div style="font-size:12px;color:#E65100">0 besetzt</div>
+              </td>
+              <td style="font-size:13px;color:var(--c-text-muted)">Klaus Bauer</td>
+              <td>
+                <div style="display:flex;gap:6px;justify-content:flex-end">
+                  <a href="rfp-detail.html" class="btn btn-outlined btn-sm" onclick="event.stopPropagation()">Öffnen</a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- RfP Phase Legend -->
+        <div style="margin-top:20px;padding:14px 16px;background:var(--c-bg);border:1px solid var(--c-border);border-radius:6px">
+          <div style="font-size:12px;font-weight:600;color:var(--c-text-muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em">RfP-Phasen</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <span style="font-size:12px;padding:2px 9px;border-radius:10px;background:#F5F5F5;color:#616161">1 Eingang</span>
+            <span style="font-size:12px;padding:2px 9px;border-radius:10px;background:#FFF9C4;color:#795548">2 Qualifizierung</span>
+            <span style="font-size:12px;padding:2px 9px;border-radius:10px;background:#E3F0FC;color:#1256A0">3 Fragenphase</span>
+            <span style="font-size:12px;padding:2px 9px;border-radius:10px;background:#E8F5E9;color:#2E7D32">4 Angebotserstellung</span>
+            <span style="font-size:12px;padding:2px 9px;border-radius:10px;background:#F3E5F5;color:#7B1FA2">5 Pitch</span>
+            <span style="font-size:12px;padding:2px 9px;border-radius:10px;background:#FBE9E7;color:#BF360C">6 Entscheidung</span>
+            <span style="font-size:12px;padding:2px 9px;border-radius:10px;background:#ECEFF1;color:#455A64">7 Learnings</span>
+          </div>
+        </div>
+
+      </div><!-- /tab-matches-rfp -->
+
+    </div><!-- /page-content -->
+  </main>
+
+</div><!-- /app-shell -->
+
+<!-- ── Candidate Drawer ──────────────────────────────────────── -->
+<div class="drawer-overlay" id="drawer-overlay"></div>
+<div class="drawer" id="candidate-drawer" aria-hidden="true">
+
+  <div class="drawer-header">
+    <div class="drawer-avatar" id="d-avatar"></div>
+    <div class="drawer-info">
+      <div class="drawer-name" id="d-name"></div>
+      <div class="drawer-role" id="d-role"></div>
+      <div class="drawer-manager-line">
+        <span class="manager-initial-sm" id="d-manager-initial"></span>
+        <span id="d-manager-name"></span>
+      </div>
+    </div>
+    <div class="drawer-score-badge">
+      <span class="score-val" id="d-score"></span>
+      <span class="score-lbl">Score</span>
+    </div>
+    <button class="drawer-close" id="drawer-close" aria-label="Schließen">×</button>
+  </div>
+
+  <div class="drawer-body">
+
+    <!-- Skill-Abgleich -->
+    <div class="drawer-section">
+      <div class="drawer-section-title">Skill-Abgleich</div>
+      <div class="skill-summary" id="d-skill-summary"></div>
+
+      <div class="skill-group">
+        <div class="skill-group-label">✓ &nbsp;Gefordert &amp; vorhanden</div>
+        <div id="d-skills-matched"></div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-label">✗ &nbsp;Fehlende Skills</div>
+        <div id="d-skills-missing"></div>
+      </div>
+      <div class="skill-group" style="margin-bottom:0">
+        <div class="skill-group-label">+ &nbsp;Weitere Skills des Mitarbeitenden</div>
+        <div id="d-skills-extra"></div>
+      </div>
+    </div>
+
+    <!-- Bewertung -->
+    <div class="drawer-section">
+      <div class="drawer-section-title" id="d-bewertung-title">Bewertung als Führungskraft</div>
+
+      <!-- Shown only for approved candidates -->
+      <div id="d-approved-view" style="display:none">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;padding:10px 12px;background:#E8F5E9;border:1px solid #C8E6C9;border-radius:6px">
+          <span style="color:#2E7D32;font-size:20px;line-height:1">✓</span>
+          <div>
+            <div style="font-size:13px;font-weight:600;color:#1B5E20">Genehmigt</div>
+            <div style="font-size:12px;color:#388E3C">Entscheidung der Führungskraft</div>
+          </div>
+        </div>
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--c-text-muted);margin-bottom:6px">Antwort der Führungskraft</div>
+        <div id="d-approved-note" style="font-size:13px;color:var(--c-text-primary);padding:10px 12px;background:var(--c-bg);border:1px solid var(--c-border);border-radius:6px;margin-bottom:14px;line-height:1.5"></div>
+      </div>
+
+      <!-- Shown for non-approved candidates -->
+      <div class="status-radio-group" id="d-status-radios">
+        <label class="status-radio-label">
+          <input type="radio" name="drawer-status" value="open" /> Offen
+        </label>
+        <label class="status-radio-label">
+          <input type="radio" name="drawer-status" value="review" /> In Prüfung
+        </label>
+        <label class="status-radio-label">
+          <input type="radio" name="drawer-status" value="approved" /> Genehmigen
+        </label>
+        <label class="status-radio-label">
+          <input type="radio" name="drawer-status" value="rejected" /> Ablehnen
+        </label>
+      </div>
+
+      <div class="form-grid" style="margin-top:12px">
+        <div class="form-field">
+          <label for="d-comment" id="d-comment-label">Kommentar (optional)</label>
+          <textarea id="d-comment" class="input-outlined" rows="3"
+            placeholder="Begründung oder Hinweis für den Ersteller…"></textarea>
+        </div>
+        <div class="form-field" id="d-tagessatz-field">
+          <label for="d-tagessatz">Mindest Tagessatz (€)</label>
+          <input type="number" id="d-tagessatz" class="input-outlined"
+            placeholder="z. B. 1100" min="0" step="50" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Kundenpräsentation -->
+    <div class="drawer-section">
+      <div class="drawer-section-title">Für Kundenpräsentation</div>
+      <p style="font-size:13px;color:var(--c-text-muted);margin-bottom:12px">
+        Gespeicherte Decidalo-Profile zur Auswahl als Kundenvorlage für Sales:
+      </p>
+      <div id="d-exports"></div>
+      <p class="no-exports" id="d-no-exports" style="display:none">
+        Keine gespeicherten Exporte für diesen Mitarbeitenden vorhanden.
+      </p>
+    </div>
+
+  </div><!-- /drawer-body -->
+
+  <div class="drawer-actions">
+    <button class="btn btn-primary" id="d-save-btn">Bewertung speichern</button>
+    <button class="btn btn-text" id="drawer-close-btn">Abbrechen</button>
+  </div>
+
+</div><!-- /drawer -->
+
+<script src="features.js"></script>
+<script src="sidebar.js"></script>
+<script src="script.js"></script>
+<script>
+/* ── Candidate & Opportunity Skill Data ───────────────────────── */
+var CANDIDATE_DATA = {
+  'MM': { name: 'Max Mustermann',  role: 'Senior Consultant',    color: '#1976D2', manager: 'Anna Schmidt',  mi: 'AS', skills: ['Java','AWS','Docker','Spring','CI/CD','Maven'] },
+  'SK': { name: 'Sandra Koch',     role: 'Consultant',           color: '#388E3C', manager: 'Anna Schmidt',  mi: 'AS', skills: ['Java','Spring','Kafka','Maven','REST'] },
+  'FW': { name: 'Felix Weber',     role: 'Consultant',           color: '#F57C00', manager: 'Anna Schmidt',  mi: 'AS', skills: ['AWS','Lambda','Docker','Node.js','S3'] },
+  'AW': { name: 'Anna Weber',      role: 'Senior Business Analyst', color: '#006064', manager: 'Anna Schmidt', mi: 'AS', skills: ['Business Analysis','Scrum','Jira','Confluence','Visio','PowerPoint','SQL'] },
+  'DK': { name: 'David Klein',     role: 'Backend Developer',    color: '#37474F', manager: 'Anna Schmidt',  mi: 'AS', skills: ['Java','AWS','Docker','Spring','SQL','Hibernate'] },
+  'TB': { name: 'Thomas Berger',   role: 'Senior Consultant',    color: '#7B1FA2', manager: 'Klaus Bauer',   mi: 'KB', skills: ['AWS','Terraform','CI/CD','Linux','Ansible','CloudFormation'] },
+  'JR': { name: 'Jana Richter',    role: 'Consultant',           color: '#E53935', manager: 'Klaus Bauer',   mi: 'KB', skills: ['Java','SQL','Spring','REST','JUnit'] },
+  'MF': { name: 'Michael Fischer', role: 'DevOps Engineer',      color: '#1B5E20', manager: 'Klaus Bauer',   mi: 'KB', skills: ['Docker','Kubernetes','GitOps','CI/CD','Helm','Prometheus'] },
+  'LM': { name: 'Lisa Müller',     role: 'Principal Consultant', color: '#0097A7', manager: 'Marco Lehmann', mi: 'ML', skills: ['Java','SQL','Maven','Scrum','BPMN','Confluence','UML'] },
+  'SB': { name: 'Sophie Braun',    role: 'Scrum Master',         color: '#880E4F', manager: 'Marco Lehmann', mi: 'ML', skills: ['Scrum','Jira','Confluence','Agile','Kanban','Miro','SAFe'] },
+};
+
+var OPP_SKILLS = {
+  'oph-1247': ['Java','AWS','Docker','PostgreSQL','Terraform'],
+  'oph-1248': ['Docker','Kubernetes','GitOps','Argo CD','WebSphere'],
+  'oph-1249': ['Business Analysis','Scrum','Kanban','Jira','Confluence'],
+};
+
+var OPP_NAMES = {
+  'oph-1247': 'Backend-Projekt Datenmigration',
+  'oph-1248': 'Container Plattform Initiative',
+  'oph-1249': 'Business Analysten IT-Consulting',
+};
+
+/* ── Drawer helpers ───────────────────────────────────────────── */
+function chip(text, style) {
+  return '<span class="chip"' + (style ? ' style="' + style + '"' : '') + '>' + text + '</span>';
+}
+
+function openDrawer(candidateKey, oppId, score, status) {
+  var c = CANDIDATE_DATA[candidateKey];
+  var reqSkills = OPP_SKILLS[oppId] || [];
+  if (!c) return;
+
+  var matched = reqSkills.filter(function(s){ return c.skills.indexOf(s) >= 0; });
+  var missing = reqSkills.filter(function(s){ return c.skills.indexOf(s) < 0; });
+  var extra   = c.skills.filter(function(s){ return reqSkills.indexOf(s) < 0; });
+
+  var av = document.getElementById('d-avatar');
+  av.textContent = candidateKey;
+  av.style.background = c.color;
+
+  document.getElementById('d-name').textContent = c.name;
+  document.getElementById('d-role').textContent = c.role + ' · ' + (OPP_NAMES[oppId] || oppId);
+  document.getElementById('d-manager-initial').textContent = c.mi;
+  document.getElementById('d-manager-name').textContent    = c.manager;
+  document.getElementById('d-score').textContent = score;
+
+  var pct = Math.round((matched.length / reqSkills.length) * 100);
+  document.getElementById('d-skill-summary').innerHTML =
+    '<strong>' + matched.length + '</strong> von <strong>' + reqSkills.length +
+    '</strong> geforderten Skills vorhanden &nbsp;<span style="color:' +
+    (pct >= 80 ? '#2E7D32' : pct >= 60 ? '#E65100' : '#C62828') + ';font-weight:700">' + pct + '%</span>';
+
+  document.getElementById('d-skills-matched').innerHTML =
+    matched.length ? matched.map(function(s){ return chip(s, 'background:#E8F5E9;color:#1B5E20;border:1px solid #C8E6C9'); }).join('')
+    : '<span style="color:var(--c-text-muted);font-size:13px">—</span>';
+
+  document.getElementById('d-skills-missing').innerHTML =
+    missing.length ? missing.map(function(s){ return chip(s, 'background:#FFEBEE;color:#C62828;border:1px solid #FFCDD2'); }).join('')
+    : '<span style="color:#2E7D32;font-size:13px">Alle geforderten Skills vorhanden ✓</span>';
+
+  document.getElementById('d-skills-extra').innerHTML =
+    extra.length ? extra.map(function(s){ return chip(s); }).join('')
+    : '<span style="color:var(--c-text-muted);font-size:13px">—</span>';
+
+  document.getElementById('d-exports').innerHTML = '';
+  document.getElementById('d-no-exports').style.display = '';
+
+  // Bewertung section: approved vs. editable
+  var isApproved = status === 'approved';
+  document.getElementById('d-approved-view').style.display  = isApproved ? '' : 'none';
+  document.getElementById('d-status-radios').style.display  = isApproved ? 'none' : '';
+  document.getElementById('d-tagessatz-field').style.display = isApproved ? 'none' : '';
+
+  if (isApproved) {
+    document.getElementById('d-bewertung-title').textContent   = 'Antwort der Führungskraft';
+    document.getElementById('d-comment-label').textContent     = 'Weiterer Kommentar';
+    document.getElementById('d-comment').placeholder           = 'Weiteren Kommentar hinzufügen…';
+    document.getElementById('d-comment').value                 = '';
+    document.getElementById('d-approved-note').textContent     =
+      'Kandidat passt sehr gut zum Projekt. Erfahrung mit der AWS-Migration ist überzeugend. Tagessatz akzeptiert. Bitte Vertrag vorbereiten.';
+    document.getElementById('d-save-btn').textContent = 'Kommentar speichern';
+  } else {
+    document.getElementById('d-bewertung-title').textContent   = 'Bewertung als Führungskraft';
+    document.getElementById('d-comment-label').textContent     = 'Kommentar (optional)';
+    document.getElementById('d-comment').placeholder           = 'Begründung oder Hinweis für den Ersteller…';
+    document.getElementById('d-comment').value                 = '';
+    document.getElementById('d-tagessatz').value               = '';
+    document.getElementById('d-save-btn').textContent          = 'Bewertung speichern';
+    var radio = document.querySelector('input[name="drawer-status"][value="' + (status || 'open') + '"]');
+    if (radio) radio.checked = true;
+  }
+
+  document.getElementById('candidate-drawer').classList.add('open');
+  document.getElementById('drawer-overlay').classList.add('open');
+  document.getElementById('candidate-drawer').setAttribute('aria-hidden', 'false');
+}
+
+function closeDrawer() {
+  document.getElementById('candidate-drawer').classList.remove('open');
+  document.getElementById('drawer-overlay').classList.remove('open');
+  document.getElementById('candidate-drawer').setAttribute('aria-hidden', 'true');
+}
+
+document.getElementById('drawer-close')     && document.getElementById('drawer-close').addEventListener('click',     closeDrawer);
+document.getElementById('drawer-close-btn') && document.getElementById('drawer-close-btn').addEventListener('click', closeDrawer);
+document.getElementById('drawer-overlay')   && document.getElementById('drawer-overlay').addEventListener('click',   closeDrawer);
+
+document.getElementById('d-save-btn') && document.getElementById('d-save-btn').addEventListener('click', function() {
+  showSnackbar('Bewertung gespeichert.');
+  closeDrawer();
+});
+
+/* ── Wire Details buttons via event delegation ────────────────── */
+document.addEventListener('click', function(e) {
+  if (!e.target.classList.contains('details-btn')) return;
+  var row = e.target.closest('tr');
+  if (!row) return;
+  openDrawer(row.dataset.candidate, row.dataset.opportunity, row.dataset.score, row.dataset.status);
+});
+
+/* ── Filter logic ─────────────────────────────────────────────── */
+(function () {
+  var fManager = document.getElementById('f-manager');
+  var fOpp     = document.getElementById('f-opp');
+  var fStatus  = document.getElementById('f-status');
+
+  function applyFilters() {
+    var managerVal = fManager ? fManager.value : '';
+    var oppVal     = fOpp     ? fOpp.value     : '';
+    var statusVal  = fStatus  ? fStatus.value  : '';
+
+    document.querySelectorAll('.manager-group').forEach(function(group) {
+      var groupKey  = group.dataset.managerKey || '';
+      var managerOk = !managerVal || groupKey === managerVal;
+
+      if (!managerOk) { group.style.display = 'none'; return; }
+      group.style.display = '';
+
+      var visible = 0;
+      group.querySelectorAll('tbody tr[data-status]').forEach(function(row) {
+        var rowOpp    = row.dataset.opportunity || '';
+        var rowStatus = row.dataset.status      || '';
+        var oppOk    = !oppVal    || rowOpp    === oppVal;
+        var statusOk = !statusVal || rowStatus === statusVal;
+
+        if (oppOk && statusOk) { row.style.display = ''; visible++; }
+        else                   { row.style.display = 'none'; }
+      });
+
+      var emptyRow = group.querySelector('.empty-state-row');
+      if (emptyRow) emptyRow.style.display = visible === 0 ? '' : 'none';
+    });
+  }
+
+  fManager && fManager.addEventListener('change', applyFilters);
+  fOpp     && fOpp.addEventListener('change',     applyFilters);
+  fStatus  && fStatus.addEventListener('change',  applyFilters);
+
+  // Pre-filter by opportunity if ?opp= URL param is set
+  var params = new URLSearchParams(window.location.search);
+  var oppParam = params.get('opp');
+  if (oppParam && fOpp) {
+    fOpp.value = oppParam;
+    if (fManager) fManager.value = ''; // show all BUs for this opportunity
+  }
+
+  applyFilters();
+})();
+
+// Auto-switch to RfP tab if URL hash is #rfp
+if (window.location.hash === '#rfp') {
+  document.querySelector('[data-tab="matches-rfp"]') && document.querySelector('[data-tab="matches-rfp"]').click();
+}
+</script>
+  <script src="feature-toggle.js"></script>
+</body>
+</html>

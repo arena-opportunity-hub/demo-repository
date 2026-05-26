@@ -1,0 +1,113 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Neue Opportunity — Opportunity Hub</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="app-shell">
+
+  <!-- ── Sidebar ──────────────────────────────────────────────── -->
+  <aside class="sidebar"></aside>
+
+  <!-- ── Main ─────────────────────────────────────────────────── -->
+  <main class="main-content">
+
+    <header class="page-header">
+      <div>
+        <div class="step-indicator">Schritt 1 von 3</div>
+        <h1>Neue Opportunity</h1>
+      </div>
+      <a href="my-opportunities.html" class="btn btn-text">Abbrechen</a>
+    </header>
+
+    <div class="page-content">
+
+      <!-- Step 1: Type Selection -->
+      <p style="color:var(--c-text-muted);margin-bottom:16px;font-size:14px">
+        Wähle die Art der Opportunity aus.
+      </p>
+
+      <div class="mode-cards" style="margin-bottom:32px">
+
+        <!-- T&M Projekt -->
+        <div class="mode-card" id="card-tm" style="cursor:pointer;border:2px solid transparent;transition:border-color 0.15s"
+             onclick="selectType('tm')">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+            <div style="width:36px;height:36px;border-radius:8px;background:#E3F0FC;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;font-weight:700;color:#1976D2;font-size:15px">T&M</div>
+            <h2 style="margin:0">T&amp;M Projekt</h2>
+          </div>
+          <p>Zeit- und Materialbasiertes Projekt. Mitarbeiter werden direkt vermittelt und nach Stunden oder Tagessatz abgerechnet.</p>
+        </div>
+
+        <!-- RfP Ausschreibung -->
+        <div class="mode-card" id="card-rfp" style="cursor:pointer;border:2px solid transparent;transition:border-color 0.15s"
+             onclick="selectType('rfp')">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+            <div style="width:36px;height:36px;border-radius:8px;background:#F3E5F5;display:flex;align-items:center;justify-content:center;font-weight:700;color:#7B1FA2;font-size:13px">RfP</div>
+            <h2 style="margin:0">RfP / Ausschreibung</h2>
+          </div>
+          <p>Request for Proposal — formeller Ausschreibungsprozess mit Fragenphase, Angebotserstellung und Pitch. Mehrere Rollen, ein gemeinsames Angebot.</p>
+        </div>
+
+      </div>
+
+      <!-- Step 2 for T&M: Mode Selection (initially hidden) -->
+      <div id="tm-mode-section" style="display:none">
+        <div style="border-top:1px solid var(--c-border);padding-top:24px;margin-bottom:16px">
+          <p style="color:var(--c-text-muted);font-size:14px;margin-bottom:16px">Wie möchtest du das T&amp;M Projekt erfassen?</p>
+          <div class="mode-cards">
+            <a href="new-opportunity-manual.html" class="mode-card">
+              <h2>Manuell</h2>
+              <p>Fülle jedes Feld einzeln aus — Titel, Kunde, Skills, Zeitraum. Volle Kontrolle, immer verfügbar.</p>
+              <span class="btn btn-primary btn-sm">Manuell erfassen</span>
+            </a>
+            <a href="new-opportunity-ai.html" class="mode-card" id="mode-card-ai">
+              <h2>AI-assistiert</h2>
+              <p>Füge einen Freitext oder eine E-Mail ein. Das System schlägt die Felder vor — du prüfst und bestätigst jeden Wert.</p>
+              <span class="btn btn-primary btn-sm">AI-Assistent starten</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2 for RfP: direct link -->
+      <div id="rfp-mode-section" style="display:none">
+        <div style="border-top:1px solid var(--c-border);padding-top:24px">
+          <p style="color:var(--c-text-muted);font-size:14px;margin-bottom:16px">RfP manuell erfassen — Fragenphase, Rollen und Angebotsprozess werden automatisch angelegt.</p>
+          <div class="mode-cards">
+            <a href="new-rfp.html" class="mode-card">
+              <h2>RfP manuell erstellen</h2>
+              <p>Titel, Kunde, Abgabefrist, benötigte Rollen und Dokumente eingeben. Der Prozess mit allen Phasen wird automatisch angelegt.</p>
+              <span class="btn btn-primary btn-sm">RfP erstellen</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /page-content -->
+  </main>
+
+</div><!-- /app-shell -->
+<script src="features.js"></script>
+<script src="sidebar.js"></script>
+<script src="script.js"></script>
+<script>
+function selectType(type) {
+  var cardTm  = document.getElementById('card-tm');
+  var cardRfp = document.getElementById('card-rfp');
+  var tmSec   = document.getElementById('tm-mode-section');
+  var rfpSec  = document.getElementById('rfp-mode-section');
+
+  cardTm.style.borderColor  = type === 'tm'  ? 'var(--c-primary)' : 'transparent';
+  cardRfp.style.borderColor = type === 'rfp' ? '#7B1FA2'           : 'transparent';
+
+  tmSec.style.display  = type === 'tm'  ? '' : 'none';
+  rfpSec.style.display = type === 'rfp' ? '' : 'none';
+}
+</script>
+  <script src="feature-toggle.js"></script>
+</body>
+</html>
